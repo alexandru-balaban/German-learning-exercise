@@ -1,6 +1,6 @@
 # Deutsch ↔ Română – German learning exercises
 
-A small static website to practise the German vocabulary from my lessons, with Romanian translations.
+A small static website to practise Goethe B1, B2 and C1 German vocabulary, with Romanian translations.
 
 Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don't need to install or build anything.
 
