@@ -6,22 +6,28 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
 
 ## Tabs
 
-- **Vocabulary**: all learnt words, split into **Verbs, Nouns, Adverbs, Connectors** (plus "Other" for prepositions).
+- **Vocabulary**: all words of your level, split into **Verbs, Nouns, Adverbs & adjectives, Connectors** (plus "Other" for prepositions and question words).
   Articles are coloured (der / die / das), 🔊 reads the word out loud, and there is a search box and an "Add word" form.
 - **Translate**: Duolingo-style exercises, German → Romanian, Romanian → German or mixed.
   - *Just words* or *Entire sentences*.
-  - Sentences only show if **every German word in them is in your vocabulary** (pronouns, articles and sein/haben are always allowed; verb conjugations and noun plurals are recognised).
+  - Sentences only show if **every German word in them is in the vocabulary of your level**. Pronouns, articles and sein/haben are always allowed, and conjugations, plurals and adjective endings are recognised. The tests check every built-in sentence.
   - If you get one wrong you see **Wrong** and the correct answer. The question comes back once at the end of the lesson.
   - Answers missing diacritics, with a small typo, or without the article are accepted, and the site tells you what to fix. The wrong article (e.g. *die Hund*) counts as wrong.
   - For sentences you can use word tiles instead of typing.
-- **Import lessons**: pull the vocabulary from the Viber conversation with the teacher.
-  1. In Viber, long-press (phone) or right-click (desktop) a lesson message → *Copy*.
-  2. Paste it into the box and press **Find vocabulary**. You can also upload a `.txt` / `.csv` file.
-  3. Lines like `der Hund - câinele`, `lernen = a învăța`, `Ich lerne Deutsch. – Învăț germană.` are detected and sorted into categories automatically. Fix any type in the table, then press **Save**.
+- **Settings**: choose the vocabulary level: **B1** (default), **B2** or **C1**. Each level includes the ones below it
+  (B2 = B1 + B2, C1 = B1 + B2 + C1). In the exercises you can also practise only the words that are new at your level.
+  Your choice is remembered. Words you add yourself are kept in the browser, and you can back them up and restore them here.
 
-Words are saved in the browser (localStorage). Use **Download data.js** and replace `js/data.js` in the repo to make your vocabulary the default on every device.
+## Vocabulary
 
-The words in `js/data.js` right now are **sample A1 vocabulary**. Replace them with your own lessons.
+The lists are in `js/levels/` (`b1.js`, `b2.js`, `c1.js`), one word per line: `type|German|Romanian|extra forms`.
+
+- **B1** follows the Goethe-Zertifikat B1 word list, which includes A1 and A2 (about 1,000 words).
+- Goethe-Institut publishes no official word lists for **B2** and **C1**. Those files hold standard vocabulary for each level
+  (about 470 and 290 extra words).
+- The lists were written by hand, not copied from the official PDF, so a word may be missing or a translation may be off.
+  To fix one, edit the line in the file.
+- Adjectives are grouped with adverbs.
 
 ## Tests
 
