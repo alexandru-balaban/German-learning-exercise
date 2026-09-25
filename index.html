@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deutsch Lernen</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🇩🇪 Deutsch <span>↔</span> 🇷🇴 Română</div>
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="vocab" role="tab">Vocabulary</button>
+      <button class="tab" data-view="exercises" role="tab">Translate</button>
+      <button class="tab" data-view="import" role="tab">Import lessons</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============ VOCABULARY ============ -->
+    <section id="view-vocab" class="view active">
+      <div id="sample-banner" class="banner hidden">
+        You are seeing <b>sample vocabulary</b>. Go to <a href="#" data-goto="import">Import lessons</a>
+        to load the words from your Viber conversation with your teacher.
+      </div>
+
+      <div class="toolbar">
+        <input id="vocab-search" type="search" placeholder="Search German or Romanian…">
+        <button id="add-word-btn" class="btn secondary">+ Add word</button>
+      </div>
+
+      <form id="add-word-form" class="card add-form hidden">
+        <input name="de" placeholder="German (e.g. der Hund, lernen)" required>
+        <input name="ro" placeholder="Romanian (e.g. câinele, a învăța)" required>
+        <select name="type">
+          <option value="verb">Verb</option>
+          <option value="noun">Noun</option>
+          <option value="adverb">Adverb</option>
+          <option value="connector">Connector</option>
+          <option value="other">Other</option>
+        </select>
+        <button class="btn" type="submit">Save</button>
+      </form>
+
+      <div class="stats" id="vocab-stats"></div>
+      <div id="vocab-groups" class="groups"></div>
+
+      <details class="card basics">
+        <summary>Basics always allowed in sentences (pronouns, articles, sein / haben)</summary>
+        <p id="basics-list" class="muted"></p>
+      </details>
+    </section>
+
+    <!-- ============ EXERCISES ============ -->
+    <section id="view-exercises" class="view">
+      <div id="ex-setup" class="card setup">
+        <h2>Translate exercises</h2>
+        <div class="field">
+          <label>What do you want to practise?</label>
+          <div class="seg" data-name="mode">
+            <button data-value="words" class="active">Just words</button>
+            <button data-value="sentences">Entire sentences</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Direction</label>
+          <div class="seg" data-name="dir">
+            <button data-value="de-ro" class="active">German → Romanian</button>
+            <button data-value="ro-de">Romanian → German</button>
+            <button data-value="mixed">Mixed</button>
+          </div>
+        </div>
+        <div class="field" id="field-types">
+          <label>Word types</label>
+          <div class="checks">
+            <label><input type="checkbox" name="t" value="verb" checked> Verbs</label>
+            <label><input type="checkbox" name="t" value="noun" checked> Nouns</label>
+            <label><input type="checkbox" name="t" value="adverb" checked> Adverbs</label>
+            <label><input type="checkbox" name="t" value="connector" checked> Connectors</label>
+            <label><input type="checkbox" name="t" value="other" checked> Other</label>
+          </div>
+        </div>
+        <div class="field" id="field-bank">
+          <label><input type="checkbox" id="use-bank"> Use word tiles instead of typing</label>
+        </div>
+        <div class="field">
+          <label>Questions per lesson</label>
+          <div class="seg" data-name="count">
+            <button data-value="5">5</button>
+            <button data-value="10" class="active">10</button>
+            <button data-value="20">20</button>
+          </div>
+        </div>
+        <p id="ex-available" class="muted"></p>
+        <button id="start-btn" class="btn big">Start</button>
+      </div>
+
+      <div id="ex-run" class="hidden">
+        <div class="run-head">
+          <button id="quit-btn" class="icon-btn" title="Quit">✕</button>
+          <div class="progress"><div id="progress-bar"></div></div>
+        </div>
+        <div class="question card">
+          <p class="q-label" id="q-label"></p>
+          <div class="prompt">
+            <button id="speak-btn" class="icon-btn" title="Listen">🔊</button>
+            <span id="q-prompt"></span>
+            <span id="q-type" class="badge"></span>
+          </div>
+          <div id="answer-typing">
+            <textarea id="answer-input" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"
+                      placeholder="Type the translation"></textarea>
+            <div class="special-chars" id="special-chars"></div>
+          </div>
+          <div id="answer-bank" class="hidden">
+            <div id="bank-answer" class="bank-line"></div>
+            <div id="bank-pool" class="bank-pool"></div>
+          </div>
+        </div>
+        <div id="feedback" class="feedback">
+          <div class="fb-text">
+            <div id="fb-title"></div>
+            <div id="fb-detail"></div>
+          </div>
+          <button id="check-btn" class="btn big">Check</button>
+        </div>
+      </div>
+
+      <div id="ex-done" class="card hidden done">
+        <h2 id="done-title"></h2>
+        <p id="done-score"></p>
+        <div id="done-mistakes"></div>
+        <button id="again-btn" class="btn big">Practise again</button>
+      </div>
+    </section>
+
+    <!-- ============ IMPORT ============ -->
+    <section id="view-import" class="view">
+      <div class="card">
+        <h2>Import your lessons from Viber</h2>
+        <ol class="steps">
+          <li><b>Phone (Android / iPhone):</b> open the chat with your teacher → tap the chat name →
+            <i>Chat info / Settings</i> → <i>Export chat</i> (older Viber: Settings → Calls and messages →
+            <i>Email message history</i>, which sends a <code>.zip</code> with a <code>.csv</code> inside).</li>
+          <li><b>Viber Desktop:</b> select the lesson messages, right-click → <i>Copy</i>, then paste below.</li>
+          <li>Upload the <code>.txt</code> / <code>.csv</code> file or paste the text, then press <b>Find vocabulary</b>.</li>
+        </ol>
+        <p class="muted">Lines like <code>der Hund - câinele</code>, <code>lernen = a învăța</code>,
+          <code>Ich lerne Deutsch. – Învăț germană.</code> are detected. You can fix the type of each word before saving.</p>
+        <input type="file" id="import-file" accept=".txt,.csv,.json">
+        <textarea id="import-text" rows="10" placeholder="…or paste the Viber conversation here"></textarea>
+        <div class="row">
+          <button id="parse-btn" class="btn">Find vocabulary</button>
+          <label class="inline"><input type="checkbox" id="replace-sample" checked> Remove sample words when saving</label>
+        </div>
+      </div>
+
+      <div id="import-preview" class="card hidden">
+        <h3 id="preview-title"></h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th></th><th>German</th><th>Romanian</th><th>Type</th></tr></thead>
+            <tbody id="preview-body"></tbody>
+          </table>
+        </div>
+        <button id="save-import-btn" class="btn">Save selected</button>
+      </div>
+
+      <div class="card">
+        <h3>Backup</h3>
+        <p class="muted">Your words are saved in this browser. Download a backup to move them to another device,
+          or download <code>data.js</code> and put it in the <code>js/</code> folder to make it the site default.</p>
+        <div class="row">
+          <button id="export-json" class="btn secondary">Download backup (.json)</button>
+          <button id="export-datajs" class="btn secondary">Download data.js</button>
+          <button id="reset-btn" class="btn danger">Reset to default data</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/data.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
