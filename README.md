@@ -15,8 +15,8 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
   - Answers missing diacritics, with a small typo, or without the article are accepted, and the site tells you what to fix. The wrong article (e.g. *die Hund*) counts as wrong.
   - For sentences you can use word tiles instead of typing.
 - **Import lessons**: pull the vocabulary from the Viber conversation with the teacher.
-  1. Export the chat from Viber (phone: chat info → *Export chat*; older versions: Settings → Calls and messages → *Email message history*, which gives a `.csv`), or copy the messages from Viber Desktop.
-  2. Upload the file or paste the text, then press **Find vocabulary**.
+  1. In Viber, long-press (phone) or right-click (desktop) a lesson message → *Copy*.
+  2. Paste it into the box and press **Find vocabulary**. You can also upload a `.txt` / `.csv` file.
   3. Lines like `der Hund - câinele`, `lernen = a învăța`, `Ich lerne Deutsch. – Învăț germană.` are detected and sorted into categories automatically. Fix any type in the table, then press **Save**.
 
 Words are saved in the browser (localStorage). Use **Download data.js** and replace `js/data.js` in the repo to make your vocabulary the default on every device.
