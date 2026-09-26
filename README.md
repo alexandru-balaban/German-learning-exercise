@@ -7,7 +7,7 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
 ## Tabs
 
 - **Vocabulary**: all words of your level, split into **Verbs, Nouns, Adverbs & adjectives, Connectors** (plus "Other" for prepositions and question words).
-  Articles are coloured (der / die / das), 🔊 reads the word out loud, and there is a search box and an "Add word" form.
+  Articles are coloured (der / die / das), and there is a search box and an "Add word" form.
 - **Exercises**: Duolingo-style exercises.
   - *Just words* or *Entire sentences*: translate German → Romanian, Romanian → German or mixed.
   - *Fill in the blank*: pick the missing preposition (*in, am, um, bei, seit…*) or connector (*weil, obwohl, dass, trotzdem…*) from 4 choices. Use the mouse or keys 1–4. The Romanian translation is shown as a hint, and after answering you see the grammar rule (e.g. *um + ora exactă*). Each level has its own set: B1 has 45, B2 adds 24 and C1 adds 15.

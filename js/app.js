@@ -34,16 +34,6 @@
   function saveCustom() { store.set(CUSTOM_KEY, custom); rebuildData(); }
   rebuildData();
 
-  // ---------------- speech ----------------
-  function speak(text, lang) {
-    if (!("speechSynthesis" in window)) return;
-    speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang === "de" ? "de-DE" : "ro-RO";
-    u.rate = 0.9;
-    speechSynthesis.speak(u);
-  }
-
   // ---------------- tabs ----------------
   function showView(name) {
     $$(".tab").forEach((t) => t.classList.toggle("active", t.dataset.view === name));
@@ -77,7 +67,6 @@
       card.innerHTML = `<h3>${TYPE_ICONS[type]} ${TYPE_LABELS[type]} <span class="count">${all.length}</span></h3>` +
         (words.length ? `<ul class="words">${words.map((w) => `
           <li>
-            <button class="icon-btn small" data-speak="${esc(w.de)}" title="Listen">🔊</button>
             <span class="de">${articleHtml(w.de)}</span>
             <span class="ro">${esc(w.ro)}</span>
             ${w.level === "mine" ? `<button class="icon-btn small del" data-del="${w.customIndex}" title="Delete">🗑</button>`
@@ -96,8 +85,6 @@
 
   $("#vocab-search").addEventListener("input", renderVocab);
   $("#vocab-groups").addEventListener("click", (e) => {
-    const sp = e.target.closest("[data-speak]");
-    if (sp) return speak(first(sp.dataset.speak), "de");
     const del = e.target.closest("[data-del]");
     if (del) {
       const w = custom.vocab[+del.dataset.del];
@@ -214,13 +201,11 @@
     const isGap = !!q.gap;
     $("#answer-choices").classList.toggle("hidden", !isGap);
     $("#q-hint").classList.toggle("hidden", !isGap);
-    $("#speak-btn").classList.toggle("hidden", isGap);
     if (isGap) return showGap(q);
     const fromDe = q.dir === "de-ro";
     const src = fromDe ? q.item.de : q.item.ro;
     q.target = fromDe ? q.item.ro : q.item.de;
     q.targetLang = fromDe ? "ro" : "de";
-    q.srcLang = fromDe ? "de" : "ro";
     q.promptText = q.sentence ? first(src, true) : src;
 
     $("#q-label").textContent = `Translate into ${fromDe ? "Romanian 🇷🇴" : "German 🇩🇪"}`;
@@ -241,7 +226,6 @@
     if (useBank) buildBank(q);
     else setTimeout(() => input.focus(), 0);
 
-    if (q.srcLang === "de") speak(first(q.promptText), "de");
   }
 
   function gapHtml(g, filled, cls) {
@@ -305,7 +289,6 @@
         `<div>Correct answer:</div><div class="right-answer">${esc(g.answer)}</div>` +
         `<div>${esc(full)}</div><div>💡 ${esc(g.rule)}</div>`);
     }
-    speak(full, "de");
     $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
   }
 
@@ -350,11 +333,6 @@
     inp.selectionStart = inp.selectionEnd = s + 1;
   });
 
-  $("#speak-btn").addEventListener("click", () => {
-    const q = session && session.current;
-    if (q) speak(first(q.promptText), q.srcLang);
-  });
-
   function currentAnswer() {
     const q = session.current;
     if (q.sentence && $("#use-bank").checked) return $$("#bank-answer .tile").map((t) => t.textContent).join(" ");
@@ -390,7 +368,6 @@
       const others = L.splitAlternatives(q.target, q.sentence).filter((a) => a !== res.best);
       const alsoOk = res.kind === "correct" && others.length ? `<div class="muted-light">Also correct: ${others.map(esc).join(" · ")}</div>` : "";
       setFeedback("right", res.kind === "correct" ? "✔ Correct!" : "✔ Almost correct!", extra + alsoOk);
-      if (q.targetLang === "de") speak(first(res.best, q.sentence), "de");
     } else {
       session.mistakes.push({ prompt: q.promptText, given: ans, right: first(q.target, q.sentence) });
       // Like Duolingo: a wrong question comes back once at the end of the lesson.
@@ -399,7 +376,6 @@
       setFeedback("wrong", "✘ Wrong",
         (res.note ? `<div>${esc(res.note)}</div>` : "") +
         `<div>Correct answer:</div><div class="right-answer">${esc(q.sentence ? first(q.target, true) : q.target)}</div>`);
-      if (q.targetLang === "de") speak(first(q.target, q.sentence), "de");
     }
     $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
   }

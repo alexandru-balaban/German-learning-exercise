@@ -146,7 +146,7 @@ input[type=checkbox] { width: auto; accent-color: var(--green); }
 .group-other { border-top: 6px solid #afafaf; }
 .words { list-style: none; margin: 0; padding: 0 4px 0 0; max-height: 560px; overflow-y: auto; }
 .words li {
-  display: grid; grid-template-columns: auto 1fr 1fr auto; gap: 8px; align-items: center;
+  display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center;
   padding: 6px 0; border-bottom: 1px solid var(--border);
 }
 .words li:last-child { border-bottom: none; }
@@ -183,7 +183,6 @@ input[type=checkbox] { width: auto; accent-color: var(--green); }
 .question { padding: 24px; }
 .q-label { font-size: 1.4rem; font-weight: 800; margin: 0 0 16px; }
 .prompt { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 1.35rem; margin-bottom: 20px; }
-.prompt #speak-btn { background: var(--blue); color: #fff; border-radius: 12px; }
 .badge { font-size: .75rem; text-transform: uppercase; font-weight: 800; border-radius: 8px; padding: 2px 8px; background: var(--bg); color: var(--muted); }
 #answer-input { font-size: 1.15rem; resize: vertical; min-height: 90px; }
 .special-chars { display: flex; gap: 6px; margin-top: 8px; }
