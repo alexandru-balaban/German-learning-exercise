@@ -15,21 +15,40 @@
 
   const TYPES = ["verb", "noun", "adverb", "connector", "other"];
 
-  const RO_PRONOUNS = new Set(["eu", "tu", "el", "ea", "noi", "voi", "ei", "ele"]);
+  // Translation languages. `articles` / `verbPrefix` are optional words the learner may leave out,
+  // `pronouns` are subject pronouns that may be dropped in sentences, `chars` are on-screen letter buttons.
+  const LANGS = {
+    ro: { name: "Română", english: "Romanian", flag: "🇷🇴", verbPrefix: /^a\s+/, pronouns: ["eu", "tu", "el", "ea", "noi", "voi", "ei", "ele"],
+      chars: ["ă", "â", "î", "ș", "ț"] },
+    en: { name: "English", english: "English", flag: "🇬🇧", articles: /^(the|a|an)\s+/, verbPrefix: /^to\s+/, chars: [] },
+    fr: { name: "Français", english: "French", flag: "🇫🇷", articles: /^(le|la|les|l'|un|une|des)\s*/, verbPrefix: /^(se\s+|s')/,
+      chars: ["é", "è", "ê", "à", "â", "ç", "ù", "û", "ô", "î", "ï", "ë", "œ"] },
+    ru: { name: "Русский", english: "Russian", flag: "🇷🇺", chars: ["ё", "й", "ъ", "ь", "ы", "э"] },
+    el: { name: "Ελληνικά", english: "Greek", flag: "🇬🇷", articles: /^(ο|η|το|οι|τα|ένας|μια|μία|ένα)\s+/,
+      pronouns: ["εγώ", "εσύ", "αυτός", "αυτή", "αυτό", "εμείς", "εσείς", "αυτοί", "αυτές", "αυτά"],
+      chars: ["ά", "έ", "ή", "ί", "ό", "ύ", "ώ", "ϊ", "ς"] },
+    uk: { name: "Українська", english: "Ukrainian", flag: "🇺🇦", chars: ["і", "ї", "є", "ґ", "й", "ь", "'"] },
+  };
+
+  const EN_CONTRACTIONS = [[/\bi'm\b/g, "i am"], [/\b(you|we|they)'re\b/g, "$1 are"], [/\b(he|she|it|that|what|there)'s\b/g, "$1 is"],
+    [/\b(i|you|we|they)'ve\b/g, "$1 have"], [/\b(i|you|he|she|it|we|they)'ll\b/g, "$1 will"], [/\b(i|you|he|she|we|they)'d\b/g, "$1 would"],
+    [/\bcan't\b/g, "cannot"], [/\bcan not\b/g, "cannot"], [/\bwon't\b/g, "will not"], [/\blet's\b/g, "let us"], [/n't\b/g, " not"]];
 
   // ---------- normalisation ----------
-  function norm(s) {
-    return String(s)
+  function norm(s, lang) {
+    let out = String(s)
       .toLowerCase()
-      .replace(/[’‘`´]/g, "'")
-      .replace(/[.,!?;:„“"”«»()\[\]¿¡…]/g, " ")
+      .replace(/[’‘`´ʼ]/g, "'")
+      .replace(/[.,!?;:„“"”«»()\[\]¿¡…;·–—]/g, " ")
       .replace(/-/g, " ")
       .replace(/\s+/g, " ")
       .trim();
+    if (lang === "en") EN_CONTRACTIONS.forEach(([re, rep]) => { out = out.replace(re, rep); });
+    return out;
   }
-  function fold(s) {
-    // Remove diacritics (ä→a, ș→s, ă→a) and ß→ss for lenient comparison.
-    return norm(s).replace(/ß/g, "ss").normalize("NFD").replace(/[̀-ͯ]/g, "")
+  function fold(s, lang) {
+    // Remove diacritics (ä→a, ș→s, ά→α, ё→е) and ß→ss / ς→σ for lenient comparison.
+    return norm(s, lang).replace(/ß/g, "ss").replace(/ς/g, "σ").normalize("NFD").replace(/[̀-ͯ]/g, "")
       .replace(/ş/g, "s").replace(/ţ/g, "t");
   }
 
@@ -55,7 +74,17 @@
     return String(text).split(sep).map((s) => s.trim()).filter(Boolean);
   }
 
-  // Extra variants we also accept (e.g. Romanian verbs without "a ", German nouns without article).
+  // Words the learner may leave out of a single-word answer: articles, "to", "a ", "sich".
+  function stripOptional(s, lang) {
+    const cfg = LANGS[lang] || {};
+    let out = s;
+    if (cfg.articles) out = out.replace(cfg.articles, "");
+    if (cfg.verbPrefix) out = out.replace(cfg.verbPrefix, "");
+    if (lang === "de") out = out.replace(/^sich\s+/, "");
+    return out.trim();
+  }
+
+  // Extra variants we also accept (text in brackets left out, Romanian nouns without article).
   function variants(answer, lang, isSentence, type) {
     const out = [answer];
     if (!isSentence) {
@@ -66,8 +95,6 @@
         const last = parts.pop();
         roNounBases(last).forEach((b) => out.push(parts.concat(b).join(" ")));
       }
-      if (lang === "ro" && /^a\s+/i.test(noParen)) out.push(noParen.replace(/^a\s+/i, ""));
-      if (lang === "de" && /^sich\s+/i.test(noParen)) out.push(noParen.replace(/^sich\s+/i, ""));
     }
     return out;
   }
@@ -82,30 +109,35 @@
     return out;
   }
 
-  function stripRoPronoun(s) {
+  function stripPronoun(s, lang) {
+    const list = (LANGS[lang] || {}).pronouns;
+    if (!list) return s;
     const w = s.split(" ");
-    return RO_PRONOUNS.has(w[0]) && w.length > 1 ? w.slice(1).join(" ") : s;
+    return list.includes(w[0]) && w.length > 1 ? w.slice(1).join(" ") : s;
   }
 
   const ARTICLE_RE = /^(der|die|das)\s+/i;
 
   /**
-   * Check an answer.
+   * Check an answer. `lang` is the language of the expected answer ("de" or a translation language).
    * @returns {{ok:boolean, kind:'correct'|'accent'|'typo'|'article'|'wrong', best:string, note?:string}}
    */
   function checkAnswer(input, target, lang, isSentence, type) {
     const alts = splitAlternatives(target, isSentence);
     const best = alts[0] || target;
-    const given = norm(input);
+    const given = norm(input, lang);
     if (!given) return { ok: false, kind: "wrong", best };
 
     const cands = [];
     alts.forEach((a) => variants(a, lang, isSentence, type).forEach((v) => cands.push({ v, orig: a })));
 
     const tries = (fn) => cands.find((c) => fn(c.v));
-    const eq = (a, b) => a === b || (lang === "ro" && isSentence && stripRoPronoun(a) === stripRoPronoun(b));
+    // Compare two normalised strings, ignoring optional words (words) or a dropped subject pronoun (sentences).
+    const same = (a, b) => a === b ||
+      (isSentence ? stripPronoun(a, lang) === stripPronoun(b, lang)
+        : lang !== "de" && stripOptional(a, lang) === stripOptional(b, lang));
 
-    let hit = tries((v) => eq(norm(v), given));
+    let hit = tries((v) => same(norm(v, lang), given));
     if (hit) return { ok: true, kind: "correct", best: hit.orig };
 
     // German noun: correct word but wrong article → wrong. Missing article → accepted with a reminder.
@@ -120,14 +152,17 @@
           return { ok: true, kind: "article", best: c.orig, note: `Don't forget the article: ${c.orig}` };
         }
       }
+      hit = tries((v) => stripOptional(norm(v), "de") === given);
+      if (hit) return { ok: true, kind: "correct", best: hit.orig };
     }
 
-    hit = tries((v) => eq(fold(v), fold(given)));
-    if (hit) return { ok: true, kind: "accent", best: hit.orig, note: "Watch the special letters (ä ö ü ß / ă â î ș ț)." };
+    hit = tries((v) => same(fold(v, lang), fold(given, lang)));
+    if (hit) return { ok: true, kind: "accent", best: hit.orig, note: "Watch the accents and special letters." };
 
     const maxTypo = isSentence ? (given.length >= 15 ? 2 : 1) : (given.length >= 5 ? 1 : 0);
     if (maxTypo) {
-      hit = tries((v) => lev(fold(v), fold(given)) <= maxTypo);
+      hit = tries((v) => lev(fold(v, lang), fold(given, lang)) <= maxTypo ||
+        (!isSentence && lang !== "de" && lev(stripOptional(fold(v, lang), lang), stripOptional(fold(given, lang), lang)) <= maxTypo));
       if (hit) return { ok: true, kind: "typo", best: hit.orig, note: "You have a typo." };
     }
     return { ok: false, kind: "wrong", best };
@@ -205,7 +240,7 @@
     return norm(sentence).split(" ").filter((t) => t && !/^\d+$/.test(t) && !known.has(t));
   }
 
-  const api = { BASICS, TYPES, norm, fold, lev, splitAlternatives, checkAnswer, buildKnownSet, unknownWords, roNounBases };
+  const api = { BASICS, TYPES, LANGS, norm, fold, lev, splitAlternatives, checkAnswer, buildKnownSet, unknownWords, roNounBases };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Lang = api;
 })(this);

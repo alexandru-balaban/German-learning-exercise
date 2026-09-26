@@ -56,7 +56,7 @@ a { color: var(--blue); }
   gap: 8px; padding: 10px 16px;
 }
 .brand { font-weight: 800; font-size: 1.15rem; }
-.brand span { color: var(--green); }
+.brand .arrow { color: var(--green); }
 .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
 .tab {
   border: 2px solid transparent; background: none; color: var(--muted);
@@ -103,7 +103,7 @@ input, textarea, select {
   border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px; width: 100%;
 }
 input:focus, textarea:focus, select:focus { outline: none; border-color: var(--blue); }
-input[type=checkbox] { width: auto; accent-color: var(--green); }
+input[type=checkbox], input[type=radio] { width: auto; accent-color: var(--green); }
 
 /* ---- levels ---- */
 .level-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; font-weight: 700; }
@@ -112,7 +112,9 @@ input[type=checkbox] { width: auto; accent-color: var(--green); }
   border-radius: 12px; background: var(--blue); color: #fff; font-weight: 800; font-size: 1.05rem;
 }
 .lvl { font-size: .7rem; font-weight: 800; border-radius: 6px; padding: 1px 6px; background: var(--bg); color: var(--muted); }
-.lvl-B1 { display: none; }
+.lvl-A1 { color: var(--green-text); }
+.lvl-A2 { color: var(--blue); }
+.lvl-B1 { color: #e8590c; }
 .lvl-B2 { color: #ce82ff; }
 .lvl-C1 { color: #ff9600; }
 .level-options { display: grid; gap: 10px; }
@@ -122,6 +124,41 @@ input[type=checkbox] { width: auto; accent-color: var(--green); }
 }
 .level-card:has(input:checked) { border-color: var(--blue); background: rgba(28, 176, 246, .08); box-shadow: 0 3px 0 var(--blue); }
 .file-btn { display: inline-block; }
+.lang-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.lang-card {
+  display: flex; gap: 12px; align-items: center; cursor: pointer;
+  border: 2px solid var(--border); border-radius: var(--radius); padding: 12px 14px; box-shadow: 0 3px 0 var(--border);
+}
+.lang-card .flag { font-size: 1.8rem; }
+.lang-card:has(input:checked) { border-color: var(--blue); background: rgba(28, 176, 246, .08); box-shadow: 0 3px 0 var(--blue); }
+
+/* ---- grammar ---- */
+.seg.small button { flex: 0 0 auto; padding: 6px 14px; }
+.lvl-big.small { min-width: 38px; font-size: .85rem; padding: 2px 8px; }
+.grammar-toc {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 4px 20px;
+  background: var(--card); border: 2px solid var(--border); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 16px;
+}
+.toc-group ul { list-style: none; margin: 6px 0 10px; padding: 0; }
+.toc-group li { padding: 2px 0; }
+.toc-group a { color: var(--text); text-decoration: none; }
+.toc-group a:hover { color: var(--blue); }
+.lvl-tag { display: inline-block; min-width: 26px; text-align: center; }
+.grammar-cat { margin: 26px 0 10px; }
+.grammar-topic { scroll-margin-top: 80px; }
+.grammar-topic summary { cursor: pointer; font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; list-style: none; }
+.grammar-topic summary::-webkit-details-marker { display: none; }
+.grammar-topic summary::after { content: "▾"; margin-left: auto; color: var(--muted); transition: transform .2s; }
+.grammar-topic[open] summary::after { transform: rotate(180deg); }
+.g-intro { margin: 14px 0 8px; }
+.g-rules li { margin-bottom: 6px; }
+.g-table { margin: 10px 0 14px; border: 2px solid var(--border); border-radius: 12px; overflow: hidden; }
+.g-table caption { text-align: left; font-weight: 800; padding: 4px 0 6px; color: var(--muted); }
+.g-table th { background: var(--bg); color: var(--text); padding: 8px 10px; }
+.g-table td { padding: 7px 10px; border-top: 1px solid var(--border); }
+.g-table td:first-child { font-weight: 700; }
+.g-examples { background: var(--green-bg); border-radius: 12px; padding: 10px 14px; margin-top: 8px; }
+.g-examples ul { margin: 6px 0 0; padding-left: 20px; }
 
 /* ---- vocabulary ---- */
 .banner {
@@ -151,7 +188,7 @@ input[type=checkbox] { width: auto; accent-color: var(--green); }
 }
 .words li:last-child { border-bottom: none; }
 .words .de { font-weight: 700; }
-.words .ro { color: var(--muted); }
+.words .tr { color: var(--muted); }
 .words .del { opacity: 0; }
 .words li:hover .del { opacity: .6; }
 .art { font-weight: 800; }

@@ -1,43 +1,66 @@
-// Turns the compact level files (b1.js, b2.js, c1.js) into word, sentence and fill-in-the-blank objects.
+// Turns the compact level files (a1.js … c1.js) into word, sentence and fill-in-the-blank objects.
+//
+// words:     type|German|ro|en|fr|ru|el|uk|extra German forms (comma separated, optional)
+//            type: v = verb, n = noun, a = adverb / adjective, c = connector, o = other
+//            "/" separates several accepted answers.
+// sentences: a German sentence, followed by one indented line per language:
+//              Ich lerne Deutsch.
+//                ro: Învăț germană.|Eu învăț germana.      ("|" separates accepted translations)
+// gaps:      kind|sentence with ___|answer|3 wrong choices|rule (in German), followed by indented translations.
+//            kind: p = preposition, c = connector
 (function (root) {
   "use strict";
-  const LEVEL_ORDER = ["B1", "B2", "C1"];
+  const LEVEL_ORDER = ["A1", "A2", "B1", "B2", "C1"];
+  const LANG_CODES = ["ro", "en", "fr", "ru", "el", "uk"];
   const TYPE_CODES = { v: "verb", n: "noun", a: "adverb", c: "connector", o: "other" };
 
+  const lines = (text) => (text || "").split("\n").filter((l) => l.trim());
+
+  // Groups "head line" + indented "xx: translation" lines.
+  function blocks(text) {
+    const out = [];
+    for (const line of lines(text)) {
+      const m = line.match(/^\s+([a-z]{2}):\s*(.*)$/);
+      if (m && out.length) out[out.length - 1].tr[m[1]] = m[2].trim();
+      else out.push({ head: line.trim(), tr: {} });
+    }
+    return out;
+  }
+
   function parseLevel(level, name) {
-    const words = level.words.split("\n").map((l) => l.trim()).filter(Boolean).map((line) => {
-      const [t, de, ro, forms] = line.split("|");
-      return { de: de.trim(), ro: ro.trim(), type: TYPE_CODES[t.trim()] || t.trim(),
-        forms: forms ? forms.split(",").map((f) => f.trim()) : undefined, level: name };
+    const words = lines(level.words).map((line) => {
+      const f = line.split("|").map((x) => x.trim());
+      const tr = {};
+      LANG_CODES.forEach((code, i) => { tr[code] = f[2 + i] || ""; });
+      const forms = f[2 + LANG_CODES.length];
+      return { de: f[1], tr, type: TYPE_CODES[f[0]] || f[0],
+        forms: forms ? forms.split(",").map((x) => x.trim()) : undefined, level: name };
     });
-    const sentences = level.sentences.split("\n").map((l) => l.trim()).filter(Boolean).map((line) => {
-      const i = line.indexOf(" = ");
-      return { de: line.slice(0, i).trim(), ro: line.slice(i + 3).trim(), level: name };
-    });
-    // Fill-in-the-blank: kind|sentence with ___|answer|3 wrong choices|Romanian|rule
-    const gaps = (level.gaps || "").split("\n").map((l) => l.trim()).filter(Boolean).map((line) => {
-      const [kind, de, answer, wrong, ro, rule] = line.split("|").map((x) => (x || "").trim());
-      return { kind: kind === "c" ? "connector" : "preposition", de, answer, wrong: wrong.split(",").map((w) => w.trim()),
-        ro, rule, level: name };
+    const sentences = blocks(level.sentences).map((b) => ({ de: b.head, tr: b.tr, level: name }));
+    const gaps = blocks(level.gaps).map((b) => {
+      const [kind, de, answer, wrong, rule] = b.head.split("|").map((x) => (x || "").trim());
+      return { kind: kind === "c" ? "connector" : "preposition", de, answer,
+        wrong: wrong.split(",").map((w) => w.trim()), rule, tr: b.tr, level: name };
     });
     return { words, sentences, gaps };
   }
 
-  // Words and sentences for a level, including all lower levels (B2 = B1 + B2).
+  // Words, sentences and gaps for a level, including all lower levels (B1 = A1 + A2 + B1).
   function loadLevel(target, levels) {
     const out = { vocab: [], sentences: [], gaps: [] };
     for (const name of LEVEL_ORDER) {
-      if (!levels[name]) continue;
-      const { words, sentences, gaps } = parseLevel(levels[name], name);
-      out.vocab.push(...words);
-      out.sentences.push(...sentences);
-      out.gaps.push(...gaps);
+      if (levels[name]) {
+        const { words, sentences, gaps } = parseLevel(levels[name], name);
+        out.vocab.push(...words);
+        out.sentences.push(...sentences);
+        out.gaps.push(...gaps);
+      }
       if (name === target) break;
     }
     return out;
   }
 
-  const api = { LEVEL_ORDER, parseLevel, loadLevel };
+  const api = { LEVEL_ORDER, LANG_CODES, parseLevel, loadLevel };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   else root.Levels = api;
 })(this);
