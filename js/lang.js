@@ -142,7 +142,7 @@
 
   // Umlaut the last a/o/u/au of a word (Stadt → Städt, laufen → läuf).
   function umlaut(w) {
-    const m = w.match(/^(.*)(au|a|o|u)([^aeiouäöü]*)$/);
+    const m = w.match(/^(.*?)(au|a|o|u)([^aeiouäöü]*)$/);
     if (!m) return null;
     return m[1] + { au: "äu", a: "ä", o: "ö", u: "ü" }[m[2]] + m[3];
   }

@@ -1,4 +1,4 @@
-// Turns the compact level files (b1.js, b2.js, c1.js) into word / sentence objects.
+// Turns the compact level files (b1.js, b2.js, c1.js) into word, sentence and fill-in-the-blank objects.
 (function (root) {
   "use strict";
   const LEVEL_ORDER = ["B1", "B2", "C1"];
@@ -14,17 +14,24 @@
       const i = line.indexOf(" = ");
       return { de: line.slice(0, i).trim(), ro: line.slice(i + 3).trim(), level: name };
     });
-    return { words, sentences };
+    // Fill-in-the-blank: kind|sentence with ___|answer|3 wrong choices|Romanian|rule
+    const gaps = (level.gaps || "").split("\n").map((l) => l.trim()).filter(Boolean).map((line) => {
+      const [kind, de, answer, wrong, ro, rule] = line.split("|").map((x) => (x || "").trim());
+      return { kind: kind === "c" ? "connector" : "preposition", de, answer, wrong: wrong.split(",").map((w) => w.trim()),
+        ro, rule, level: name };
+    });
+    return { words, sentences, gaps };
   }
 
   // Words and sentences for a level, including all lower levels (B2 = B1 + B2).
   function loadLevel(target, levels) {
-    const out = { vocab: [], sentences: [] };
+    const out = { vocab: [], sentences: [], gaps: [] };
     for (const name of LEVEL_ORDER) {
       if (!levels[name]) continue;
-      const { words, sentences } = parseLevel(levels[name], name);
+      const { words, sentences, gaps } = parseLevel(levels[name], name);
       out.vocab.push(...words);
       out.sentences.push(...sentences);
+      out.gaps.push(...gaps);
       if (name === target) break;
     }
     return out;

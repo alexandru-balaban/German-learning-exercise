@@ -317,4 +317,22 @@ Er hat mir vorgeworfen, das Problem zu vernachlässigen. = Mi-a reproșat că ne
 Die Maßnahmen sind zwar umstritten, aber weitgehend wirksam. = Măsurile sunt, ce-i drept, controversate, dar în mare măsură eficiente.
 Insgesamt fällt die Bilanz des Jahres positiv aus. = Per ansamblu, bilanțul anului este pozitiv.
 `,
+
+  gaps: `
+p|___ der aktuellen Lage müssen wir handeln.|Angesichts|Zugunsten,Mangels,Zwecks|Având în vedere situația actuală, trebuie să acționăm.|angesichts + genitiv = având în vedere
+p|Das Geld wird ___ der Kinder gesammelt.|zugunsten|mangels,infolge,inmitten|Banii sunt strânși în favoarea copiilor.|zugunsten + genitiv = în favoarea
+p|Der Studie ___ ist die Arbeitslosigkeit gestiegen.|zufolge|angesichts,mangels,seitens|Conform studiului, șomajul a crescut.|zufolge stă după substantiv (+ dativ)
+p|___ Geld ist das Projekt gescheitert.|Mangels|Zugunsten,Kraft,Zwecks|Din lipsă de bani, proiectul a eșuat.|mangels + genitiv / fără articol = din lipsă de
+p|___ der Krise haben viele Menschen ihre Arbeit verloren.|Infolge|Zugunsten,Mangels,Inmitten|Ca urmare a crizei, mulți oameni și-au pierdut locul de muncă.|infolge + genitiv = ca urmare a
+p|Er stand ___ der Menschen und sprach.|inmitten|kraft,zwecks,mangels|Stătea în mijlocul oamenilor și vorbea.|inmitten + genitiv = în mijlocul
+p|Wir haben ___ der Kosten noch keine Entscheidung getroffen.|hinsichtlich|mangels,zugunsten,inmitten|Cu privire la costuri, încă nu am luat o decizie.|hinsichtlich + genitiv = cu privire la
+c|Ich komme morgen, ___ ich werde krank.|es sei denn|sofern,zumal,wohingegen|Vin mâine, cu excepția cazului în care mă îmbolnăvesc.|es sei denn = cu excepția cazului în care (ordine normală a cuvintelor)
+c|Er hat keine Zeit, ___ er viel arbeiten muss.|zumal|sofern,wohingegen,hingegen|Nu are timp, cu atât mai mult cu cât trebuie să lucreze mult.|zumal = cu atât mai mult cu cât
+c|___ keine Einwände bestehen, setzen wir den Plan um.|Sofern|Zumal,Obgleich,Wohingegen|Dacă nu există obiecții, punem planul în practică.|sofern = cu condiția ca / dacă
+c|Er spricht kaum Deutsch, ___ Englisch.|geschweige denn|es sei denn,zumal,wenngleich|Abia vorbește germana, cu atât mai puțin engleza.|geschweige denn = cu atât mai puțin
+c|Mein Bruder liebt die Stadt, ___ ich lieber auf dem Land lebe.|wohingegen|zumal,sofern,es sei denn|Fratele meu iubește orașul, în timp ce eu prefer să trăiesc la țară.|wohingegen = în timp ce (contrast)
+c|___ er müde war, hat er bis spät gearbeitet.|Obgleich|Sofern,Zumal,Demnach|Deși era obosit, a lucrat până târziu.|obgleich = deși (formal)
+c|Die Kosten sind gestiegen, ___ müssen wir sparen.|somit|wohingegen,zumal,obgleich|Costurile au crescut, prin urmare trebuie să economisim.|somit = prin urmare (verbul imediat după)
+c|Die Kosten sind hoch. ___ ist das Projekt ein Erfolg.|Nichtsdestotrotz|Demzufolge,Zumal,Sofern|Costurile sunt mari. Cu toate acestea, proiectul este un succes.|nichtsdestotrotz = cu toate acestea
+`,
 };

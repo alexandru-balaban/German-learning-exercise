@@ -761,6 +761,29 @@ n|das Zentrum|centrul
 n|das Zeugnis|diploma / certificatul
 n|das Ziel|ținta / scopul
 n|das Zimmer|camera
+n|der Montag|luni
+n|der Dienstag|marți
+n|der Mittwoch|miercuri
+n|der Donnerstag|joi
+n|der Freitag|vineri
+n|der Samstag|sâmbătă
+n|der Sonntag|duminică
+n|der Januar|ianuarie
+n|der Februar|februarie
+n|der März|martie
+n|der April|aprilie
+n|der Mai|mai
+n|der Juni|iunie
+n|der Juli|iulie
+n|der August|august
+n|der September|septembrie
+n|der Oktober|octombrie
+n|der November|noiembrie
+n|der Dezember|decembrie
+n|Rumänien|România
+n|Berlin|Berlin
+n|Rumänisch|româna / limba română
+n|Englisch|engleza / limba engleză
 n|der Zucker|zahărul
 n|der Zug|trenul
 n|die Zukunft|viitorul
@@ -1063,5 +1086,53 @@ Ich habe meine Hausaufgaben schon gemacht. = Mi-am făcut deja temele.|Am făcut
 Wir warten seit einer Stunde auf den Bus. = Așteptăm autobuzul de o oră.|De o oră așteptăm autobuzul.
 Kannst du mir sagen, wo der Bahnhof ist? = Poți să-mi spui unde este gara?|Îmi poți spune unde e gara?
 Mein Handy ist kaputt, ich muss ein neues kaufen. = Telefonul meu este stricat, trebuie să cumpăr unul nou.|Telefonul meu e stricat, trebuie să cumpăr unul nou.
+`,
+
+  gaps: `
+p|Ich wohne ___ Berlin.|in|an,bei,auf|Locuiesc în Berlin.|in + oraș / țară (unde?)
+p|Der Kurs beginnt ___ neun Uhr.|um|am,im,in|Cursul începe la ora nouă.|um + ora exactă
+p|___ Montag habe ich einen Termin beim Arzt.|Am|Im,Um,In|Luni am o programare la doctor.|am + zi a săptămânii
+p|Mein Geburtstag ist ___ Mai.|im|am,um,an|Ziua mea de naștere este în mai.|im + lună
+p|___ Sommer ist es sehr heiß.|Im|Am,Um,An|Vara este foarte cald.|im + anotimp
+p|Ich stehe jeden Tag ___ sieben Uhr auf.|um|am,im,an|Mă trezesc în fiecare zi la ora șapte.|um + ora exactă
+p|Wir fahren ___ Wochenende in die Berge.|am|im,um,an|În weekend mergem la munte.|am Wochenende
+p|Ich bin heute ___ Arzt, weil ich krank bin.|beim|im,am,um|Sunt azi la doctor pentru că sunt bolnav.|bei + persoană / loc unde te afli (bei + dem = beim)
+p|Ich gehe morgen ___ Arzt.|zum|beim,im,am|Mâine merg la doctor.|zu + persoană (încotro? — zu + dem = zum)
+p|Wir fahren im Sommer ___ Deutschland.|nach|zu,bei,an|Vara mergem în Germania.|nach + țară / oraș fără articol (încotro?)
+p|Ich komme ___ Rumänien.|aus|von,nach,bei|Sunt din România.|aus = din (proveniență)
+p|Er wohnt noch ___ seinen Eltern.|bei|zu,an,aus|El încă locuiește la părinții lui.|bei + persoană = la cineva (acasă)
+p|Das Buch liegt ___ dem Tisch.|auf|um,aus,nach|Cartea stă pe masă.|auf = pe (suprafață orizontală)
+p|Das Bild hängt ___ der Wand.|an|auf,in,um|Tabloul atârnă pe perete.|an = pe (suprafață verticală)
+p|Ich fahre jeden Tag ___ dem Bus zur Arbeit.|mit|bei,von,aus|Merg în fiecare zi cu autobuzul la muncă.|mit + mijloc de transport
+p|Das Geschenk ist ___ dich.|für|zu,bei,aus|Cadoul este pentru tine.|für + acuzativ = pentru
+p|Ich warte ___ den Bus.|auf|an,für,um|Aștept autobuzul.|warten auf + acuzativ
+p|Ich lerne ___ drei Monaten Deutsch.|seit|vor,um,an|Învăț germană de trei luni.|seit = de (o perioadă care continuă)
+p|Ich habe ihn ___ zwei Tagen gesehen.|vor|seit,um,bei|L-am văzut acum două zile.|vor + timp = acum … (în trecut)
+p|Ich kaufe Brot ___ Supermarkt.|im|am,um,zum|Cumpăr pâine de la supermarket.|in + dem = im (unde?)
+p|Wir treffen uns ___ Bahnhof.|am|um,zum,aus|Ne întâlnim la gară.|an + dem = am (la, lângă)
+p|Kannst du mir ___ den Hausaufgaben helfen?|bei|an,zu,aus|Mă poți ajuta la teme?|helfen bei + dativ
+p|Er denkt oft ___ seine Familie.|an|auf,mit,bei|Se gândește des la familia lui.|denken an + acuzativ
+p|Ich interessiere mich ___ Musik.|für|an,über,auf|Mă interesează muzica.|sich interessieren für
+p|Sie freut sich ___ den Urlaub.|auf|an,für,mit|Ea se bucură de concediul care urmează.|sich freuen auf = a aștepta cu bucurie ceva viitor
+p|Ich gehe jetzt ___ Hause.|nach|zu,bei,in|Acum merg acasă.|nach Hause = spre casă (încotro?)
+p|Ich bin heute den ganzen Tag ___ Hause.|zu|nach,bei,in|Azi sunt toată ziua acasă.|zu Hause = acasă (unde?)
+p|Er kommt gerade ___ der Arbeit.|von|an,um,für|Tocmai vine de la muncă.|von = de la
+p|Der Film läuft ___ Kino.|im|am,um,an|Filmul rulează la cinema.|in + dem = im
+c|Ich bleibe zu Hause, ___ ich krank bin.|weil|obwohl,dass,ob|Rămân acasă pentru că sunt bolnav.|weil = pentru că (verbul la final)
+c|Ich frage ihn, ___ er Zeit hat.|ob|dass,weil,denn|Îl întreb dacă are timp.|ob = dacă (întrebare indirectă)
+c|Er sagt, ___ er keine Zeit hat.|dass|ob,weil,denn|El spune că nu are timp.|dass = că
+c|___ es regnet, nehme ich einen Regenschirm.|Wenn|Obwohl,Dass,Ob|Când plouă, iau o umbrelă.|wenn = dacă / când (repetat sau în prezent)
+c|Ich bin müde, ___ ich gehe noch ins Kino.|aber|weil,dass,ob|Sunt obosit, dar mai merg la cinema.|aber = dar (ordine normală a cuvintelor)
+c|___ ich müde bin, lerne ich noch.|Obwohl|Weil,Dass,Denn|Deși sunt obosit, încă învăț.|obwohl = deși
+c|Er ist krank, ___ geht er nicht zur Arbeit.|deshalb|trotzdem,weil,denn|Este bolnav, de aceea nu merge la muncă.|deshalb = de aceea (verbul imediat după)
+c|Sie ist krank, ___ geht sie zur Arbeit.|trotzdem|deshalb,weil,obwohl|Este bolnavă, totuși merge la muncă.|trotzdem = totuși (verbul imediat după)
+c|Möchtest du Tee ___ Kaffee?|oder|aber,sondern,denn|Vrei ceai sau cafea?|oder = sau
+c|Das ist nicht mein Bruder, ___ mein Freund.|sondern|aber,oder,denn|Acesta nu este fratele meu, ci prietenul meu.|nicht …, sondern = nu …, ci
+c|___ ich ein Kind war, habe ich auf dem Land gewohnt.|Als|Wenn,Ob,Dass|Când eram copil, am locuit la țară.|als = când (o singură dată / perioadă în trecut)
+c|Ich lerne Deutsch, ___ ich in Deutschland arbeiten kann.|damit|obwohl,ob,denn|Învăț germană ca să pot lucra în Germania.|damit = ca să / pentru ca
+c|Ich gehe nach Hause, ___ ich bin müde.|denn|weil,dass,obwohl|Merg acasă, căci sunt obosit.|denn = căci (ordine normală a cuvintelor)
+c|Zuerst frühstücke ich, ___ gehe ich zur Arbeit.|dann|denn,dass,als|Mai întâi iau micul dejun, apoi merg la muncă.|dann = apoi
+c|Ich warte, ___ du fertig bist.|bis|ob,denn,als|Aștept până când ești gata.|bis = până (când)
+c|Ich habe keinen Hunger, ___ ich habe schon gegessen.|denn|weil,dass,ob|Nu mi-e foame, căci am mâncat deja.|denn = căci (ordine normală a cuvintelor)
 `,
 };

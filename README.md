@@ -8,8 +8,9 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
 
 - **Vocabulary**: all words of your level, split into **Verbs, Nouns, Adverbs & adjectives, Connectors** (plus "Other" for prepositions and question words).
   Articles are coloured (der / die / das), 🔊 reads the word out loud, and there is a search box and an "Add word" form.
-- **Translate**: Duolingo-style exercises, German → Romanian, Romanian → German or mixed.
-  - *Just words* or *Entire sentences*.
+- **Exercises**: Duolingo-style exercises.
+  - *Just words* or *Entire sentences*: translate German → Romanian, Romanian → German or mixed.
+  - *Fill in the blank*: pick the missing preposition (*in, am, um, bei, seit…*) or connector (*weil, obwohl, dass, trotzdem…*) from 4 choices. Use the mouse or keys 1–4. The Romanian translation is shown as a hint, and after answering you see the grammar rule (e.g. *um + ora exactă*). Each level has its own set: B1 has 45, B2 adds 24 and C1 adds 15.
   - Sentences only show if **every German word in them is in the vocabulary of your level**. Pronouns, articles and sein/haben are always allowed, and conjugations, plurals and adjective endings are recognised. The tests check every built-in sentence.
   - If you get one wrong you see **Wrong** and the correct answer. The question comes back once at the end of the lesson.
   - Answers missing diacritics, with a small typo, or without the article are accepted, and the site tells you what to fix. The wrong article (e.g. *die Hund*) counts as wrong.
@@ -21,6 +22,7 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
 ## Vocabulary
 
 The lists are in `js/levels/` (`b1.js`, `b2.js`, `c1.js`), one word per line: `type|German|Romanian|extra forms`.
+Fill-in-the-blank lines are `p|c` (preposition or connector)`|sentence with ___|answer|3 wrong choices|Romanian|rule`.
 
 - **B1** follows the Goethe-Zertifikat B1 word list, which includes A1 and A2 (about 1,000 words).
 - Goethe-Institut publishes no official word lists for **B2** and **C1**. Those files hold standard vocabulary for each level

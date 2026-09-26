@@ -504,4 +504,31 @@ Er hat zwar viel Geld, aber er ist nicht glücklich. = Ce-i drept, are mulți ba
 Das Unternehmen sucht zuverlässige Mitarbeiter. = Compania caută angajați de încredere.|Firma caută angajați de încredere.
 Viele Menschen haben Vorurteile gegenüber Ausländern. = Mulți oameni au prejudecăți față de străini.
 `,
+
+  gaps: `
+p|Das hängt ___ dem Wetter ab.|von|an,aus,mit|Asta depinde de vreme.|abhängen von + dativ
+p|Er hat sich ___ die Stelle beworben.|um|auf,an,mit|A aplicat pentru post.|sich bewerben um + acuzativ
+p|Ich beschwere mich ___ den Lärm.|über|auf,an,um|Mă plâng de zgomot.|sich beschweren über + acuzativ
+p|___ des schlechten Wetters haben wir den Ausflug gemacht.|Trotz|Seit,Ohne,Durch|În ciuda vremii rele am făcut excursia.|trotz + genitiv = în ciuda
+p|___ des Regens bleiben wir zu Hause.|Wegen|Trotz,Ohne,Seit|Din cauza ploii rămânem acasă.|wegen + genitiv = din cauza
+p|Wir müssen uns ___ die Umwelt kümmern.|um|für,über,an|Trebuie să avem grijă de mediu.|sich kümmern um + acuzativ
+p|Ich habe ___ der Veranstaltung teilgenommen.|an|auf,für,um|Am participat la eveniment.|teilnehmen an + dativ
+p|Sie hat Angst ___ der Prüfung.|vor|von,für,an|Îi este frică de examen.|Angst haben vor + dativ
+p|Er ist stolz ___ seine Kinder.|auf|über,an,für|Este mândru de copiii lui.|stolz sein auf + acuzativ
+p|___ eines Jahres muss das Projekt fertig sein.|Innerhalb|Außerhalb,Trotz,Statt|În decurs de un an proiectul trebuie să fie gata.|innerhalb + genitiv = în decurs de
+p|Das Hotel liegt ___ dem Bahnhof.|gegenüber|innerhalb,aufgrund,trotz|Hotelul este vizavi de gară.|gegenüber + dativ = vizavi de
+p|___ der Kosten hat die Firma das Projekt aufgegeben.|Aufgrund|Trotz,Statt,Innerhalb|Din cauza costurilor, firma a renunțat la proiect.|aufgrund + genitiv = din cauza / pe baza
+p|Wir diskutieren ___ das Problem.|über|an,um,auf|Discutăm despre problemă.|diskutieren über + acuzativ
+c|___ du Fragen hast, kannst du mich anrufen.|Falls|Obwohl,Ob,Dass|În cazul în care ai întrebări, mă poți suna.|falls = în cazul în care
+c|___ mehr ich lerne, desto besser verstehe ich.|Je|Wenn,Als,Ob|Cu cât învăț mai mult, cu atât înțeleg mai bine.|je …, desto = cu cât …, cu atât
+c|Er hat zwar viel Geld, ___ er ist nicht glücklich.|aber|sondern,denn,oder|Ce-i drept, are mulți bani, dar nu este fericit.|zwar …, aber = ce-i drept …, dar
+c|Einerseits ist die Wohnung schön, ___ ist sie sehr teuer.|andererseits|deshalb,sondern,denn|Pe de o parte apartamentul e frumos, pe de altă parte e foarte scump.|einerseits …, andererseits
+c|Er ging, ___ sich zu verabschieden.|ohne|damit,dass,weil|A plecat fără să-și ia rămas bun.|ohne … zu = fără să
+c|Sie lernt jeden Abend, ___ sie die Prüfung besteht.|damit|dass,ob,obwohl|Învață în fiecare seară ca să promoveze examenul.|damit = ca să (scop)
+c|Die Firma hat viel Geld verloren, ___ musste sie Mitarbeiter entlassen.|deshalb|trotzdem,obwohl,sondern|Firma a pierdut mulți bani, de aceea a trebuit să concedieze angajați.|deshalb = de aceea
+c|___ er krank war, ist er zur Arbeit gegangen.|Obwohl|Weil,Damit,Falls|Deși era bolnav, a mers la muncă.|obwohl = deși
+c|Ich rufe dich an, ___ ich angekommen bin.|sobald|ob,denn,solange|Te sun de îndată ce am ajuns.|sobald = de îndată ce
+c|Er arbeitet nicht, ___ er schläft.|sondern|aber,dass,ob|Nu lucrează, ci doarme.|nicht …, sondern = nu …, ci
+c|Wir bleiben hier, ___ es regnet.|solange|ob,dass,sondern|Rămânem aici atâta timp cât plouă.|solange = atâta timp cât
+`,
 };

@@ -11,7 +11,7 @@
     <div class="brand">🇩🇪 Deutsch <span>↔</span> 🇷🇴 Română</div>
     <nav class="tabs" role="tablist">
       <button class="tab active" data-view="vocab" role="tab">Vocabulary</button>
-      <button class="tab" data-view="exercises" role="tab">Translate</button>
+      <button class="tab" data-view="exercises" role="tab">Exercises</button>
       <button class="tab" data-view="settings" role="tab">Settings</button>
     </nav>
   </header>
@@ -54,15 +54,16 @@
     <!-- ============ EXERCISES ============ -->
     <section id="view-exercises" class="view">
       <div id="ex-setup" class="card setup">
-        <h2>Translate exercises</h2>
+        <h2>Exercises</h2>
         <div class="field">
           <label>What do you want to practise?</label>
           <div class="seg" data-name="mode">
             <button data-value="words" class="active">Just words</button>
             <button data-value="sentences">Entire sentences</button>
+            <button data-value="gaps">Fill in the blank</button>
           </div>
         </div>
-        <div class="field">
+        <div class="field" id="field-dir">
           <label>Direction</label>
           <div class="seg" data-name="dir">
             <button data-value="de-ro" class="active">German → Romanian</button>
@@ -85,6 +86,13 @@
             <label><input type="checkbox" name="t" value="adverb" checked> Adverbs & adjectives</label>
             <label><input type="checkbox" name="t" value="connector" checked> Connectors</label>
             <label><input type="checkbox" name="t" value="other" checked> Other</label>
+          </div>
+        </div>
+        <div class="field hidden" id="field-gapkinds">
+          <label>Missing word</label>
+          <div class="checks">
+            <label><input type="checkbox" name="g" value="preposition" checked> Prepositions (in, am, um, bei…)</label>
+            <label><input type="checkbox" name="g" value="connector" checked> Connectors (weil, obwohl, dass…)</label>
           </div>
         </div>
         <div class="field" id="field-bank">
@@ -114,6 +122,8 @@
             <span id="q-prompt"></span>
             <span id="q-type" class="badge"></span>
           </div>
+          <p id="q-hint" class="q-hint hidden"></p>
+          <div id="answer-choices" class="choices hidden"></div>
           <div id="answer-typing">
             <textarea id="answer-input" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"
                       placeholder="Type the translation"></textarea>
