@@ -22,7 +22,7 @@ Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don'
 ## Vocabulary
 
 The lists are in `js/levels/` (`b1.js`, `b2.js`, `c1.js`), one word per line: `type|German|Romanian|extra forms`.
-Fill-in-the-blank lines are `p|c` (preposition or connector)`|sentence with ___|answer|3 wrong choices|Romanian|rule`.
+Fill-in-the-blank lines are `kind|sentence with ___|answer|3 wrong choices|Romanian|rule`, where kind is `p` (preposition) or `c` (connector).
 
 - **B1** follows the Goethe-Zertifikat B1 word list, which includes A1 and A2 (about 1,000 words).
 - Goethe-Institut publishes no official word lists for **B2** and **C1**. Those files hold standard vocabulary for each level
