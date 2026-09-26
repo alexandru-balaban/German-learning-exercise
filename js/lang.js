@@ -148,7 +148,7 @@
         const noun = norm(c.v.replace(ARTICLE_RE, ""));
         const g = given.replace(ARTICLE_RE, "");
         if (fold(g) === fold(noun)) {
-          if (ARTICLE_RE.test(given)) return { ok: false, kind: "wrong", best: c.orig, note: `Wrong article: it is “${m[1].toLowerCase()}”.` };
+          if (ARTICLE_RE.test(given)) return { ok: false, kind: "wrong", best: c.orig, art: m[1].toLowerCase(), note: `Wrong article: it is “${m[1].toLowerCase()}”.` };
           return { ok: true, kind: "article", best: c.orig, note: `Don't forget the article: ${c.orig}` };
         }
       }

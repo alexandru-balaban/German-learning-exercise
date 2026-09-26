@@ -1,236 +1,310 @@
 <!doctype html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Deutsch Lernen</title>
+  <title>Deutsch Guy – learn German</title>
+  <meta name="description" content="Deutsch Guy: German vocabulary, exercises and grammar (Goethe A1–C1) by AX Tech.">
+  <meta name="author" content="AX Tech">
+  <meta name="theme-color" content="#0B1220">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Reusable line icons -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-vocab" viewBox="0 0 24 24"><path d="M12 6.5C10 5 7.5 4.5 4 4.5v13c3.5 0 6 .5 8 2 2-1.5 4.5-2 8-2v-13c-3.5 0-6 .5-8 2Z"/><path d="M12 6.5v13"/></symbol>
+    <symbol id="i-exercises" viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></symbol>
+    <symbol id="i-grammar" viewBox="0 0 24 24"><rect x="4" y="3.5" width="16" height="17" rx="2"/><path d="M12 3.5v17M7 8h2M7 12h2M15 8h2M15 12h2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="i-bars" viewBox="0 0 24 24"><path d="M6 20v-6M12 20V9M18 20V4"/></symbol>
+    <symbol id="i-verb" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+    <symbol id="i-noun" viewBox="0 0 24 24"><path d="M12 2.5 20.5 7v10L12 21.5 3.5 17V7L12 2.5Z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></symbol>
+    <symbol id="i-adverb" viewBox="0 0 24 24"><path d="M5 19c0-8 5-13 15-14-1 10-6 15-14 15"/><path d="M5 19 13 11"/></symbol>
+    <symbol id="i-connector" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
+    <symbol id="i-sentence" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8L12 3Z"/></symbol>
+    <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5M22 9v6"/></symbol>
+  </svg>
+
   <header class="topbar">
-    <div class="brand">🇩🇪 Deutsch <span class="arrow">↔</span> <span id="brand-lang">🇷🇴 Română</span></div>
-    <nav class="tabs" role="tablist">
-      <button class="tab active" data-view="vocab" role="tab">Vocabulary</button>
-      <button class="tab" data-view="exercises" role="tab">Exercises</button>
-      <button class="tab" data-view="grammar" role="tab">Grammar</button>
-      <button class="tab" data-view="settings" role="tab">Settings</button>
-    </nav>
+    <a class="brand" href="#" data-goto="vocab" aria-label="Deutsch Guy">
+      <img src="assets/deutsch-guy.svg" alt="" class="brand-logo" width="40" height="40">
+      <span class="brand-text">
+        <span class="brand-name">Deutsch Guy</span>
+        <span class="brand-pair">Deutsch <span class="arrow">↔</span> <span id="brand-lang">Română</span></span>
+      </span>
+    </a>
+    <div class="top-actions">
+      <button class="chip chip-level" data-goto="settings"><svg class="ic"><use href="#i-bars"/></svg><span data-i18n="level">Level</span>&nbsp;<b id="level-now">B1</b></button>
+      <button class="chip chip-lang" data-goto="settings" id="lang-now">🇷🇴</button>
+    </div>
   </header>
 
-  <main>
-    <!-- ============ VOCABULARY ============ -->
-    <section id="view-vocab" class="view active">
-      <div class="level-bar">
-        Goethe level <b id="level-now" class="lvl-big">B1</b>
-        · Translation <b id="lang-now">🇷🇴 Română</b>
-        <a href="#" data-goto="settings">Change</a>
+  <div class="layout">
+    <aside class="sidebar">
+      <nav class="tabs" role="tablist">
+        <button class="tab active" data-view="vocab" role="tab"><svg class="ic"><use href="#i-vocab"/></svg><span data-i18n="nav_vocab">Vocabulary</span></button>
+        <button class="tab" data-view="exercises" role="tab"><svg class="ic"><use href="#i-exercises"/></svg><span data-i18n="nav_exercises">Exercises</span></button>
+        <button class="tab" data-view="grammar" role="tab"><svg class="ic"><use href="#i-grammar"/></svg><span data-i18n="nav_grammar">Grammar</span></button>
+        <button class="tab" data-view="settings" role="tab"><svg class="ic"><use href="#i-settings"/></svg><span data-i18n="nav_settings">Settings</span></button>
+      </nav>
+      <div class="motto">
+        <svg class="ic motto-ic"><use href="#i-cap"/></svg>
+        <p class="motto-title">Lerne heute, für eine bessere Zukunft!</p>
+        <p class="motto-sub">Kleine Schritte, große Ziele.</p>
+        <svg class="motto-mountains" viewBox="0 0 200 70" aria-hidden="true"><path d="M0 70 45 30l20 16 40-40 30 28 20-12 45 48Z"/><path d="M105 6 92 19l8 1 5-5 6 6 7-1Z" class="snow"/></svg>
       </div>
+      <a class="by-ax" href="#" data-goto="settings" title="AX Tech">
+        <span data-i18n="made_by">made by</span>
+        <img src="assets/brand/ax-logo-horizontal-small-dark.svg" alt="AX Tech" height="22">
+      </a>
+    </aside>
 
-      <div class="toolbar">
-        <input id="vocab-search" type="search" placeholder="Search…">
-        <button id="add-word-btn" class="btn secondary">+ Add word</button>
-      </div>
+    <main>
+      <!-- ============ VOCABULARY ============ -->
+      <section id="view-vocab" class="view active">
+        <div class="hero">
+          <div class="hero-text">
+            <p class="hero-hello">Hallo, Student!</p>
+            <h1 data-i18n="hero_title">German made easy.</h1>
+            <p class="hero-sub" data-i18n="hero_sub">Learn the essential vocabulary for university, work and everyday life.</p>
+          </div>
+          <svg class="hero-city" viewBox="0 0 900 220" preserveAspectRatio="xMaxYMax meet" aria-hidden="true">
+            <g class="far">
+              <rect x="80" y="150" width="60" height="70"/><rect x="150" y="130" width="40" height="90"/><rect x="200" y="160" width="70" height="60"/>
+              <rect x="420" y="150" width="50" height="70"/><rect x="600" y="140" width="45" height="80"/><rect x="700" y="155" width="60" height="65"/>
+            </g>
+            <g class="near">
+              <!-- Fernsehturm -->
+              <rect x="252" y="40" width="7" height="180"/><rect x="254" y="8" width="3" height="40"/><circle cx="255.5" cy="80" r="15"/><rect x="248" y="98" width="15" height="6"/>
+              <!-- Reichstag -->
+              <rect x="300" y="150" width="240" height="70"/><rect x="300" y="128" width="34" height="92"/><rect x="506" y="128" width="34" height="92"/>
+              <path d="M360 150 380 132h80l20 18Z"/><path d="M372 132a48 48 0 0 1 96 0Z"/>
+              <!-- Brandenburger Tor -->
+              <rect x="640" y="140" width="170" height="16"/><rect x="646" y="128" width="158" height="12"/><path d="M700 128h50l-8-12h-34Z"/>
+              <rect x="648" y="156" width="10" height="64"/><rect x="676" y="156" width="10" height="64"/><rect x="704" y="156" width="10" height="64"/>
+              <rect x="736" y="156" width="10" height="64"/><rect x="764" y="156" width="10" height="64"/><rect x="792" y="156" width="10" height="64"/>
+            </g>
+            <g class="dome"><path d="M372 132a48 48 0 0 1 96 0" /><path d="M396 88v44M420 84v48M444 88v44M378 112h84"/></g>
+            <!-- flag -->
+            <rect x="848" y="30" width="3" height="190" class="pole"/>
+            <path d="M851 32c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#111"/>
+            <path d="M851 46c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#DD0000"/>
+            <path d="M851 60c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#FFCE00"/>
+          </svg>
+        </div>
 
-      <form id="add-word-form" class="card add-form hidden">
-        <input name="de" placeholder="German (e.g. der Hund, lernen)" required>
-        <input name="tr" placeholder="Translation" required>
-        <select name="type">
-          <option value="verb">Verb</option>
-          <option value="noun">Noun</option>
-          <option value="adverb">Adverb / adjective</option>
-          <option value="connector">Connector</option>
-          <option value="other">Other</option>
-        </select>
-        <button class="btn" type="submit">Save</button>
-      </form>
-
-      <div class="stats" id="vocab-stats"></div>
-      <div id="vocab-groups" class="groups"></div>
-
-      <details class="card basics">
-        <summary>Basics always allowed in sentences (pronouns, articles, sein / haben)</summary>
-        <p id="basics-list" class="muted"></p>
-      </details>
-    </section>
-
-    <!-- ============ EXERCISES ============ -->
-    <section id="view-exercises" class="view">
-      <div id="ex-setup" class="card setup">
-        <h2>Exercises</h2>
-        <div class="field">
-          <label>What do you want to practise?</label>
-          <div class="seg" data-name="mode">
-            <button data-value="words" class="active">Just words</button>
-            <button data-value="sentences">Entire sentences</button>
-            <button data-value="gaps">Fill in the blank</button>
-          </div>
-        </div>
-        <div class="field" id="field-dir">
-          <label>Direction</label>
-          <div class="seg" data-name="dir">
-            <button data-value="de-ro" class="active">German → <span class="lang-name">Romanian</span></button>
-            <button data-value="ro-de"><span class="lang-name">Romanian</span> → German</button>
-            <button data-value="mixed">Mixed</button>
-          </div>
-        </div>
-        <div class="field">
-          <label>Which words</label>
-          <div class="seg" data-name="scope">
-            <button data-value="all" class="active">Everything up to <span class="level-name">B1</span></button>
-            <button data-value="level">Only new <span class="level-name">B1</span> words</button>
-          </div>
-        </div>
-        <div class="field" id="field-types">
-          <label>Word types</label>
-          <div class="checks">
-            <label><input type="checkbox" name="t" value="verb" checked> Verbs</label>
-            <label><input type="checkbox" name="t" value="noun" checked> Nouns</label>
-            <label><input type="checkbox" name="t" value="adverb" checked> Adverbs & adjectives</label>
-            <label><input type="checkbox" name="t" value="connector" checked> Connectors</label>
-            <label><input type="checkbox" name="t" value="other" checked> Other</label>
-          </div>
-        </div>
-        <div class="field hidden" id="field-gapkinds">
-          <label>Missing word</label>
-          <div class="checks">
-            <label><input type="checkbox" name="g" value="preposition" checked> Prepositions (in, am, um, bei…)</label>
-            <label><input type="checkbox" name="g" value="connector" checked> Connectors (weil, obwohl, dass…)</label>
-          </div>
-        </div>
-        <div class="field" id="field-bank">
-          <label><input type="checkbox" id="use-bank"> Use word tiles instead of typing</label>
-        </div>
-        <div class="field">
-          <label>Questions per lesson</label>
-          <div class="seg" data-name="count">
-            <button data-value="5">5</button>
-            <button data-value="10" class="active">10</button>
-            <button data-value="20">20</button>
-          </div>
-        </div>
-        <p id="ex-available" class="muted"></p>
-        <button id="start-btn" class="btn big">Start</button>
-      </div>
-
-      <div id="ex-run" class="hidden">
-        <div class="run-head">
-          <button id="quit-btn" class="icon-btn" title="Quit">✕</button>
-          <div class="progress"><div id="progress-bar"></div></div>
-        </div>
-        <div class="question card">
-          <p class="q-label" id="q-label"></p>
-          <div class="prompt">
-            <span id="q-prompt"></span>
-            <span id="q-type" class="badge"></span>
-          </div>
-          <p id="q-hint" class="q-hint hidden"></p>
-          <div id="answer-choices" class="choices hidden"></div>
-          <div id="answer-typing">
-            <textarea id="answer-input" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"
-                      placeholder="Type the translation"></textarea>
-            <div class="special-chars" id="special-chars"></div>
-          </div>
-          <div id="answer-bank" class="hidden">
-            <div id="bank-answer" class="bank-line"></div>
-            <div id="bank-pool" class="bank-pool"></div>
-          </div>
-        </div>
-        <div id="feedback" class="feedback">
-          <div class="fb-text">
-            <div id="fb-title"></div>
-            <div id="fb-detail"></div>
-          </div>
-          <button id="check-btn" class="btn big">Check</button>
-        </div>
-      </div>
-
-      <div id="ex-done" class="card hidden done">
-        <h2 id="done-title"></h2>
-        <p id="done-score"></p>
-        <div id="done-mistakes"></div>
-        <button id="again-btn" class="btn big">Practise again</button>
-      </div>
-    </section>
-
-    <!-- ============ GRAMMAR ============ -->
-    <section id="view-grammar" class="view">
-      <div class="grammar-head card">
-        <h2>Grammatik</h2>
-        <p class="muted">The grammar topics of the Goethe exams (A1–C1), explained in German, with tables and examples.</p>
         <div class="toolbar">
-          <input id="grammar-search" type="search" placeholder="Suchen … (z. B. Dativ, Futur, weil)">
+          <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="vocab-search" type="search" placeholder="Search…"></label>
+          <button id="add-word-btn" class="btn"><svg class="ic"><use href="#i-plus"/></svg><span data-i18n="add_word">Add word</span></button>
         </div>
-        <div class="seg small" id="grammar-levels">
-          <button data-value="all" class="active">Alle</button>
-          <button data-value="A1">A1</button>
-          <button data-value="A2">A2</button>
-          <button data-value="B1">B1</button>
-          <button data-value="B2">B2</button>
-          <button data-value="C1">C1</button>
-        </div>
-      </div>
-      <nav id="grammar-toc" class="grammar-toc"></nav>
-      <div id="grammar-list"></div>
-    </section>
 
-    <!-- ============ SETTINGS ============ -->
-    <section id="view-settings" class="view">
-      <div class="card">
-        <h2>Translation language</h2>
-        <p class="muted">German is always the language you learn. Choose the language for translations and exercises.</p>
-        <div id="lang-options" class="lang-options"></div>
-      </div>
+        <form id="add-word-form" class="card add-form hidden">
+          <input name="de" data-i18n-ph="ph_german" placeholder="German" required>
+          <input name="tr" data-i18n-ph="ph_translation" placeholder="Translation" required>
+          <select name="type">
+            <option value="verb" data-i18n="t_verb">Verb</option>
+            <option value="noun" data-i18n="t_noun">Noun</option>
+            <option value="adverb" data-i18n="t_adverb">Adjective / adverb</option>
+            <option value="connector" data-i18n="t_connector">Connector</option>
+            <option value="other" data-i18n="t_other">Other</option>
+          </select>
+          <button class="btn" type="submit" data-i18n="save">Save</button>
+        </form>
 
-      <div class="card">
-        <h2>Vocabulary level</h2>
-        <p class="muted">Every level includes the levels below it, so B1 = A1 + A2 + B1.
-          All exercises only use words from the level you choose.</p>
-        <div id="level-options" class="level-options">
-          <label class="level-card">
-            <input type="radio" name="level" value="A1">
-            <span class="lvl-big">A1</span>
-            <span><b>Beginner</b><br><span class="muted">Goethe-Zertifikat A1: first words, family, food, time</span></span>
-            <span class="muted" data-count="A1"></span>
-          </label>
-          <label class="level-card">
-            <input type="radio" name="level" value="A2">
-            <span class="lvl-big">A2</span>
-            <span><b>Elementary</b><br><span class="muted">Goethe-Zertifikat A2: everyday life, travel, health, work</span></span>
-            <span class="muted" data-count="A2"></span>
-          </label>
-          <label class="level-card">
-            <input type="radio" name="level" value="B1">
-            <span class="lvl-big">B1</span>
-            <span><b>Intermediate</b><br><span class="muted">Goethe-Zertifikat B1 word list</span></span>
-            <span class="muted" data-count="B1"></span>
-          </label>
-          <label class="level-card">
-            <input type="radio" name="level" value="B2">
-            <span class="lvl-big">B2</span>
-            <span><b>Upper intermediate</b><br><span class="muted">Work, society, media, environment</span></span>
-            <span class="muted" data-count="B2"></span>
-          </label>
-          <label class="level-card">
-            <input type="radio" name="level" value="C1">
-            <span class="lvl-big">C1</span>
-            <span><b>Advanced</b><br><span class="muted">Academic and formal language</span></span>
-            <span class="muted" data-count="C1"></span>
-          </label>
-        </div>
-      </div>
+        <div class="stats" id="vocab-stats"></div>
+        <div id="vocab-groups" class="groups"></div>
 
-      <div class="card">
-        <h3>My own words (<span id="custom-count">0</span>)</h3>
-        <p class="muted">Words you add with “+ Add word” are saved in this browser and included at every level
-          (in the translation language you had selected when adding them).</p>
-        <div class="row">
-          <button id="export-json" class="btn secondary">Download backup</button>
-          <label class="btn secondary file-btn">Restore backup<input type="file" id="import-backup" accept=".json" hidden></label>
-          <button id="reset-btn" class="btn danger">Delete my words</button>
+        <details class="card basics">
+          <summary data-i18n="basics">Basics always allowed in sentences</summary>
+          <p id="basics-list" class="muted"></p>
+        </details>
+      </section>
+
+      <!-- ============ EXERCISES ============ -->
+      <section id="view-exercises" class="view">
+        <div id="ex-setup" class="card setup">
+          <h2 data-i18n="ex_title">Exercises</h2>
+          <div class="field">
+            <label data-i18n="ex_what">What do you want to practise?</label>
+            <div class="seg" data-name="mode">
+              <button data-value="words" class="active" data-i18n="m_words">Just words</button>
+              <button data-value="sentences" data-i18n="m_sentences">Entire sentences</button>
+              <button data-value="gaps" data-i18n="m_gaps">Fill in the blank</button>
+            </div>
+          </div>
+          <div class="field" id="field-dir">
+            <label data-i18n="ex_dir">Direction</label>
+            <div class="seg" data-name="dir">
+              <button data-value="de-ro" class="active"><span class="lang-de">German</span> → <span class="lang-name">Romanian</span></button>
+              <button data-value="ro-de"><span class="lang-name">Romanian</span> → <span class="lang-de">German</span></button>
+              <button data-value="mixed" data-i18n="dir_mixed">Mixed</button>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="ex_scope">Which words</label>
+            <div class="seg" data-name="scope">
+              <button data-value="all" class="active" id="scope-all">Everything</button>
+              <button data-value="level" id="scope-level">Only new words</button>
+            </div>
+          </div>
+          <div class="field" id="field-types">
+            <label data-i18n="ex_types">Word types</label>
+            <div class="checks">
+              <label><input type="checkbox" name="t" value="verb" checked> <span data-i18n="g_verb">Verbs</span></label>
+              <label><input type="checkbox" name="t" value="noun" checked> <span data-i18n="g_noun">Nouns</span></label>
+              <label><input type="checkbox" name="t" value="adverb" checked> <span data-i18n="g_adverb">Adjectives & adverbs</span></label>
+              <label><input type="checkbox" name="t" value="connector" checked> <span data-i18n="g_connector">Connectors</span></label>
+              <label><input type="checkbox" name="t" value="other" checked> <span data-i18n="g_other">Other</span></label>
+            </div>
+          </div>
+          <div class="field hidden" id="field-gapkinds">
+            <label data-i18n="ex_missing">Missing word</label>
+            <div class="checks">
+              <label><input type="checkbox" name="g" value="preposition" checked> <span data-i18n="gk_prep">Prepositions</span></label>
+              <label><input type="checkbox" name="g" value="connector" checked> <span data-i18n="gk_conn">Connectors</span></label>
+            </div>
+          </div>
+          <div class="field" id="field-bank">
+            <label class="inline"><input type="checkbox" id="use-bank"> <span data-i18n="use_bank">Use word tiles instead of typing</span></label>
+          </div>
+          <div class="field">
+            <label data-i18n="ex_count">Questions per lesson</label>
+            <div class="seg" data-name="count">
+              <button data-value="5">5</button>
+              <button data-value="10" class="active">10</button>
+              <button data-value="20">20</button>
+            </div>
+          </div>
+          <p id="ex-available" class="muted"></p>
+          <button id="start-btn" class="btn big" data-i18n="start">Start</button>
         </div>
-      </div>
-    </section>
-  </main>
+
+        <div id="ex-run" class="hidden">
+          <div class="run-head">
+            <button id="quit-btn" class="icon-btn" title="✕">✕</button>
+            <div class="progress"><div id="progress-bar"></div></div>
+          </div>
+          <div class="question card">
+            <p class="q-label" id="q-label"></p>
+            <div class="prompt">
+              <span id="q-prompt"></span>
+              <span id="q-type" class="badge"></span>
+            </div>
+            <p id="q-hint" class="q-hint hidden"></p>
+            <div id="answer-choices" class="choices hidden"></div>
+            <div id="answer-typing">
+              <textarea id="answer-input" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+              <div class="special-chars" id="special-chars"></div>
+            </div>
+            <div id="answer-bank" class="hidden">
+              <div id="bank-answer" class="bank-line"></div>
+              <div id="bank-pool" class="bank-pool"></div>
+            </div>
+          </div>
+          <div id="feedback" class="feedback">
+            <div class="fb-text">
+              <div id="fb-title"></div>
+              <div id="fb-detail"></div>
+            </div>
+            <button id="check-btn" class="btn big">Check</button>
+          </div>
+        </div>
+
+        <div id="ex-done" class="card hidden done">
+          <img src="assets/deutsch-guy.svg" alt="" width="72" height="72" class="done-guy">
+          <h2 id="done-title"></h2>
+          <p id="done-score"></p>
+          <div id="done-mistakes"></div>
+          <button id="again-btn" class="btn big" data-i18n="again">Practise again</button>
+        </div>
+      </section>
+
+      <!-- ============ GRAMMAR ============ -->
+      <section id="view-grammar" class="view">
+        <div class="grammar-head card">
+          <h2>Grammatik</h2>
+          <p class="muted" data-i18n="grammar_intro">The grammar topics of the Goethe exams (A1–C1), explained in German.</p>
+          <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="grammar-search" type="search" placeholder="Suchen … (z. B. Dativ, Futur, weil)"></label>
+          <div class="seg small" id="grammar-levels">
+            <button data-value="all" class="active">Alle</button>
+            <button data-value="A1">A1</button>
+            <button data-value="A2">A2</button>
+            <button data-value="B1">B1</button>
+            <button data-value="B2">B2</button>
+            <button data-value="C1">C1</button>
+          </div>
+        </div>
+        <nav id="grammar-toc" class="grammar-toc"></nav>
+        <div id="grammar-list"></div>
+      </section>
+
+      <!-- ============ SETTINGS ============ -->
+      <section id="view-settings" class="view">
+        <div class="card">
+          <h2 data-i18n="set_lang">Translation language</h2>
+          <p class="muted" data-i18n="set_lang_desc">German is always the language you learn.</p>
+          <div id="lang-options" class="lang-options"></div>
+        </div>
+
+        <div class="card">
+          <h2 data-i18n="set_level">Vocabulary level</h2>
+          <p class="muted" data-i18n="set_level_desc">Every level includes the levels below it.</p>
+          <div id="level-options" class="level-options">
+            <label class="level-card"><input type="radio" name="level" value="A1"><span class="lvl-big lvl-bg-A1">A1</span>
+              <span><b data-i18n="lv_A1">Beginner</b><br><span class="muted" data-i18n="lvd_A1"></span></span><span class="muted" data-count="A1"></span></label>
+            <label class="level-card"><input type="radio" name="level" value="A2"><span class="lvl-big lvl-bg-A2">A2</span>
+              <span><b data-i18n="lv_A2">Elementary</b><br><span class="muted" data-i18n="lvd_A2"></span></span><span class="muted" data-count="A2"></span></label>
+            <label class="level-card"><input type="radio" name="level" value="B1"><span class="lvl-big lvl-bg-B1">B1</span>
+              <span><b data-i18n="lv_B1">Intermediate</b><br><span class="muted" data-i18n="lvd_B1"></span></span><span class="muted" data-count="B1"></span></label>
+            <label class="level-card"><input type="radio" name="level" value="B2"><span class="lvl-big lvl-bg-B2">B2</span>
+              <span><b data-i18n="lv_B2">Upper intermediate</b><br><span class="muted" data-i18n="lvd_B2"></span></span><span class="muted" data-count="B2"></span></label>
+            <label class="level-card"><input type="radio" name="level" value="C1"><span class="lvl-big lvl-bg-C1">C1</span>
+              <span><b data-i18n="lv_C1">Advanced</b><br><span class="muted" data-i18n="lvd_C1"></span></span><span class="muted" data-count="C1"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3><span data-i18n="my_words">My own words</span> (<span id="custom-count">0</span>)</h3>
+          <p class="muted" data-i18n="my_words_desc"></p>
+          <div class="row">
+            <button id="export-json" class="btn secondary" data-i18n="backup">Download backup</button>
+            <label class="btn secondary file-btn"><span data-i18n="restore">Restore backup</span><input type="file" id="import-backup" accept=".json" hidden></label>
+            <button id="reset-btn" class="btn danger" data-i18n="delete_mine">Delete my words</button>
+          </div>
+        </div>
+
+        <div class="card about">
+          <img src="assets/deutsch-guy.svg" alt="" width="56" height="56">
+          <div>
+            <b>Deutsch Guy</b><br>
+            <span class="muted" id="about-stats"></span>
+          </div>
+          <img class="about-ax" src="assets/brand/ax-logo-horizontal-dark.svg" alt="AX Tech" height="40">
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>© Deutsch Guy</span>
+        <span class="footer-ax"><span data-i18n="made_by">made by</span> <img src="assets/brand/ax-logo-horizontal-small-dark.svg" alt="AX Tech" height="16"></span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Word details -->
+  <div id="word-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-card card">
+      <button class="icon-btn modal-close" id="modal-close" title="✕">✕</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
 
   <script src="js/levels/a1.js"></script>
   <script src="js/levels/a2.js"></script>
@@ -239,6 +313,7 @@
   <script src="js/levels/c1.js"></script>
   <script src="js/levels/index.js"></script>
   <script src="js/lang.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/grammar.js"></script>
   <script src="js/app.js"></script>
 </body>
