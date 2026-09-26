@@ -10,8 +10,14 @@
   const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   const first = (text, isSentence) => L.splitAlternatives(text, isSentence)[0] || text;
 
-  const TYPE_LABELS = { verb: "Verbs", noun: "Nouns", adverb: "Adverbs & adjectives", connector: "Connectors", other: "Other" };
-  const TYPE_ICONS = { verb: "🏃", noun: "📦", adverb: "⏱️", connector: "🔗", other: "✳️" };
+  // Interface texts (js/i18n.js) follow the translation language.
+  const t = (key, vars) => {
+    let s = ((window.I18N[lang] || {})[key]) ?? window.I18N.en[key] ?? key;
+    for (const [k, v] of Object.entries(vars || {})) s = s.split("{" + k + "}").join(v);
+    return s;
+  };
+  const langName = (code) => (window.I18N_LANG_NAMES[lang] || window.I18N_LANG_NAMES.en)[code];
+  const icon = (id, cls = "") => `<svg class="ic ${cls}"><use href="#i-${id}"/></svg>`;
 
   // ---------------- data ----------------
   // Level vocabulary comes from js/levels/*.js; words the user adds are kept in localStorage.
@@ -65,27 +71,34 @@
     const q = L.fold($("#vocab-search").value || "");
     const groups = $("#vocab-groups");
     groups.innerHTML = "";
-    const counts = [];
+    const stats = [];
     for (const type of L.TYPES) {
       const all = data.vocab.filter((w) => w.type === type);
+      stats.push({ type, icon: type, n: all.length, label: t("st_" + type) });
       if (type === "other" && !all.length) continue;
-      counts.push(`<span>${TYPE_ICONS[type]} ${all.length} ${TYPE_LABELS[type].toLowerCase()}</span>`);
       const words = all
         .filter((w) => !q || L.fold(w.de).includes(q) || L.fold(w.tr, lang).includes(q))
         .sort((a, b) => a.de.replace(/^(der|die|das|sich) /i, "").localeCompare(b.de.replace(/^(der|die|das|sich) /i, ""), "de"));
       const card = document.createElement("div");
       card.className = "card group group-" + type;
-      card.innerHTML = `<h3>${TYPE_ICONS[type]} ${TYPE_LABELS[type]} <span class="count">${all.length}</span></h3>` +
+      card.innerHTML = `
+        <div class="group-head">${icon(type)}
+          <div><h3>${esc(t("g_" + type))}</h3><p>${esc(t("s_" + type))}</p></div>
+          <span class="count">${all.length}</span>
+        </div>` +
         (words.length ? `<ul class="words">${words.map((w) => `
-          <li>
+          <li data-word="${w.level === "mine" ? "mine:" + w.customIndex : esc(w.de) + "|" + w.type}">
             <span class="de">${articleHtml(w.de)}</span>
             <span class="tr">${esc(w.tr)}</span>
-            ${w.level === "mine" ? `<button class="icon-btn small del" data-del="${w.customIndex}" title="Delete">🗑</button>`
+            ${w.level === "mine" ? `<button class="icon-btn del" data-del="${w.customIndex}" title="✕">🗑</button>`
               : `<span class="lvl lvl-${w.level}">${w.level}</span>`}
-          </li>`).join("")}</ul>` : `<p class="muted">${q ? "No matches." : "No words yet."}</p>`);
+            ${icon("chevron", "chev")}
+          </li>`).join("")}</ul>` : `<p class="muted empty">${q ? t("no_matches") : t("no_words")}</p>`);
       groups.appendChild(card);
     }
-    $("#vocab-stats").innerHTML = counts.join("") + `<span>💬 ${data.sentences.length} sentences</span>`;
+    stats.push({ type: "sentence", icon: "sentence", n: data.sentences.length, label: t("st_sentences") });
+    $("#vocab-stats").innerHTML = stats.map((x) =>
+      `<div class="stat">${icon(x.icon, "c-" + x.type)}<div><b>${x.n}</b><span>${esc(x.label)}</span></div></div>`).join("");
     $("#basics-list").textContent = L.BASICS.join(", ");
   }
   function articleHtml(de) {
@@ -97,9 +110,11 @@
   $("#vocab-search").addEventListener("input", renderVocab);
   $("#vocab-groups").addEventListener("click", (e) => {
     const del = e.target.closest("[data-del]");
+    const row = e.target.closest("[data-word]");
+    if (!del && row) return openWord(row.dataset.word);
     if (del) {
       const w = custom.vocab[+del.dataset.del];
-      if (w && confirm(`Delete “${w.de}”?`)) {
+      if (w && confirm(t("confirm_delete", { x: w.de }))) {
         custom.vocab.splice(+del.dataset.del, 1);
         saveCustom();
         renderVocab();
@@ -118,6 +133,33 @@
     f.de.focus();
     renderVocab();
   });
+
+  // ---------------- word details ----------------
+  function openWord(key) {
+    let w;
+    if (key.startsWith("mine:")) {
+      const c = custom.vocab[+key.slice(5)];
+      w = c && { de: c.de, type: c.type, tr: c.tr, level: "mine" };
+    } else {
+      const [de, type] = key.split("|");
+      w = window.Levels.loadLevel("C1", window.LEVELS).vocab.find((x) => x.de === de && x.type === type);
+    }
+    if (!w) return;
+    const rows = Object.entries(L.LANGS).filter(([code]) => w.tr[code]).map(([code, info]) => `
+      <li class="${code === lang ? "current" : ""}"><span class="flag">${info.flag}</span><span class="muted">${esc(info.name)}</span><span>${esc(w.tr[code])}</span></li>`).join("");
+    $("#modal-body").innerHTML = `
+      <h2>${articleHtml(w.de)}</h2>
+      <div class="meta"><span class="badge">${esc(t("t_" + w.type))}</span>${w.level !== "mine" ? `<span class="lvl lvl-${w.level}">${w.level}</span>` : ""}</div>
+      <h3>${esc(t("all_translations"))}</h3>
+      <ul class="tr-list">${rows}</ul>
+      ${w.forms ? `<h3 style="margin-top:16px">${esc(t("forms"))}</h3><p class="muted">${w.forms.map(esc).join(", ")}</p>` : ""}`;
+    $("#modal-close").title = t("close");
+    $("#word-modal").classList.remove("hidden");
+  }
+  const closeModal = () => $("#word-modal").classList.add("hidden");
+  $("#modal-close").addEventListener("click", closeModal);
+  $("#word-modal").addEventListener("click", (e) => { if (e.target.id === "word-modal") closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
 
   // ---------------- exercise setup ----------------
   const settings = { mode: "words", dir: "de-ro", count: 10, scope: "all" };
@@ -158,16 +200,14 @@
     $("#field-bank").classList.toggle("hidden", settings.mode !== "sentences");
     $("#field-dir").classList.toggle("hidden", isGaps);
     $("#field-gapkinds").classList.toggle("hidden", !isGaps);
-    $$(".level-name").forEach((el) => { el.textContent = level; });
-    $$(".lang-name").forEach((el) => { el.textContent = langInfo().english; });
+    $("#scope-all").textContent = t("scope_all", { lvl: level });
+    $("#scope-level").textContent = t("scope_level", { lvl: level });
+    $$(".lang-name").forEach((el) => { el.textContent = langName(lang); });
+    $$(".lang-de").forEach((el) => { el.textContent = langName("de"); });
     let msg;
-    if (isWords) {
-      msg = `${wordPool().length} words available (level ${level}).`;
-    } else if (isGaps) {
-      msg = `${gapPool().length} fill-in-the-blank sentences available (level ${level}).`;
-    } else {
-      msg = `${learntSentences().length} sentences available — they only use words from your vocabulary (level ${level}).`;
-    }
+    if (isWords) msg = t("av_words", { n: wordPool().length, lvl: level });
+    else if (isGaps) msg = t("av_gaps", { n: gapPool().length, lvl: level });
+    else msg = t("av_sentences", { n: learntSentences().length, lvl: level });
     $("#ex-available").textContent = msg;
   }
 
@@ -193,9 +233,7 @@
   function startSession() {
     const qs = buildQuestions();
     if (!qs.length) {
-      alert(settings.mode === "words" ? "No words for these types yet." :
-        settings.mode === "gaps" ? "No fill-in-the-blank sentences for these settings." :
-        "No sentences available for these settings.");
+      alert(t(settings.mode === "words" ? "no_words_types" : settings.mode === "gaps" ? "no_gaps" : "no_sentences"));
       return;
     }
     session = { queue: qs, total: qs.length, done: 0, correct: 0, mistakes: [], retried: new Set(), current: null, answered: false };
@@ -222,9 +260,9 @@
     q.targetLang = fromDe ? lang : "de";
     q.promptText = q.sentence ? first(src, true) : src;
 
-    $("#q-label").textContent = `Translate into ${fromDe ? langInfo().english + " " + langInfo().flag : "German 🇩🇪"}`;
+    $("#q-label").textContent = t("translate_into", { x: fromDe ? langName(lang) : langName("de") }) + " " + (fromDe ? langInfo().flag : "🇩🇪");
     $("#q-prompt").textContent = q.promptText;
-    $("#q-type").textContent = q.sentence ? "sentence" : q.item.type;
+    $("#q-type").textContent = q.sentence ? t("b_sentence") : t("t_" + q.item.type);
     $("#q-type").className = "badge badge-" + (q.sentence ? "sentence" : q.item.type);
     $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
 
@@ -234,7 +272,7 @@
     const input = $("#answer-input");
     input.value = "";
     input.disabled = false;
-    input.placeholder = `Type in ${fromDe ? langInfo().english : "German"}`;
+    input.placeholder = t("type_in", { x: langName(fromDe ? lang : "de") });
     $("#special-chars").innerHTML = (q.targetLang === "de" ? ["ä", "ö", "ü", "ß"] : langInfo().chars)
       .map((c) => `<button type="button" data-char="${c}">${c}</button>`).join("");
     if (useBank) buildBank(q);
@@ -253,9 +291,9 @@
     q.choices = shuffle([g.answer, ...g.wrong]);
     q.selected = null;
     q.promptText = g.de;
-    $("#q-label").textContent = "Choose the missing word";
+    $("#q-label").textContent = t("choose_missing");
     $("#q-prompt").innerHTML = gapHtml(g);
-    $("#q-type").textContent = g.kind;
+    $("#q-type").textContent = g.kind === "connector" ? t("t_connector") : t("b_preposition");
     $("#q-type").className = "badge badge-" + g.kind;
     $("#q-hint").textContent = langInfo().flag + " " + g.hint;
     $("#answer-typing").classList.add("hidden");
@@ -294,13 +332,13 @@
     if (ok) {
       session.correct++;
       session.done++;
-      setFeedback("right", "✔ Correct!", `<div>${esc(full)}</div><div class="muted-light">💡 ${esc(g.rule)}</div>`);
+      setFeedback("right", t("correct"), `<div>${esc(full)}</div><div class="muted-light">💡 ${esc(g.rule)}</div>`);
     } else {
       session.mistakes.push({ prompt: g.de, given, right: g.answer });
       if (!session.retried.has(q)) { session.retried.add(q); session.queue.push(q); }
       else session.done++;
-      setFeedback("wrong", "✘ Wrong",
-        `<div>Correct answer:</div><div class="right-answer">${esc(g.answer)}</div>` +
+      setFeedback("wrong", t("wrong"),
+        `<div>${esc(t("correct_answer"))}</div><div class="right-answer">${esc(g.answer)}</div>` +
         `<div>${esc(full)}</div><div>💡 ${esc(g.rule)}</div>`);
     }
     $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
@@ -358,7 +396,16 @@
     fb.className = "feedback" + (state ? " " + state : "");
     $("#fb-title").innerHTML = title || "";
     $("#fb-detail").innerHTML = detail || "";
-    $("#check-btn").textContent = state ? "Continue" : "Check";
+    $("#check-btn").textContent = state ? t("continue") : t("check");
+  }
+
+  // Short hint about why an answer was only almost right (or which article was wrong).
+  function noteText(res) {
+    if (res.kind === "accent") return t("note_accent");
+    if (res.kind === "typo") return t("note_typo");
+    if (res.kind === "article") return t("note_article", { x: res.best });
+    if (res.art) return t("note_wrong_article", { x: res.art });
+    return "";
   }
 
   function check() {
@@ -378,18 +425,18 @@
     if (res.ok) {
       session.correct++;
       session.done++;
-      const extra = res.kind === "correct" ? "" : `<div>${esc(res.note || "")}</div><div>Correct answer: <b>${esc(res.best)}</b></div>`;
+      const extra = res.kind === "correct" ? "" : `<div>${esc(noteText(res))}</div><div>${esc(t("correct_answer"))} <b>${esc(res.best)}</b></div>`;
       const others = L.splitAlternatives(q.target, q.sentence).filter((a) => a !== res.best);
-      const alsoOk = res.kind === "correct" && others.length ? `<div class="muted-light">Also correct: ${others.map(esc).join(" · ")}</div>` : "";
-      setFeedback("right", res.kind === "correct" ? "✔ Correct!" : "✔ Almost correct!", extra + alsoOk);
+      const alsoOk = res.kind === "correct" && others.length ? `<div class="muted-light">${esc(t("also_correct"))} ${others.map(esc).join(" · ")}</div>` : "";
+      setFeedback("right", res.kind === "correct" ? t("correct") : t("almost"), extra + alsoOk);
     } else {
       session.mistakes.push({ prompt: q.promptText, given: ans, right: first(q.target, q.sentence) });
       // Like Duolingo: a wrong question comes back once at the end of the lesson.
       if (!session.retried.has(q)) { session.retried.add(q); session.queue.push(q); }
       else session.done++;
-      setFeedback("wrong", "✘ Wrong",
-        (res.note ? `<div>${esc(res.note)}</div>` : "") +
-        `<div>Correct answer:</div><div class="right-answer">${esc(q.sentence ? first(q.target, true) : q.target)}</div>`);
+      setFeedback("wrong", t("wrong"),
+        (noteText(res) ? `<div>${esc(noteText(res))}</div>` : "") +
+        `<div>${esc(t("correct_answer"))}</div><div class="right-answer">${esc(q.sentence ? first(q.target, true) : q.target)}</div>`);
     }
     $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
   }
@@ -412,10 +459,10 @@
     $("#ex-done").classList.remove("hidden");
     const firstTry = session.total - session.retried.size;
     const pct = Math.round(100 * firstTry / session.total);
-    $("#done-title").textContent = pct === 100 ? "🎉 Perfect lesson!" : pct >= 70 ? "👏 Well done!" : "💪 Keep practising!";
-    $("#done-score").textContent = `${firstTry} of ${session.total} right on the first try (${pct}%).`;
+    $("#done-title").textContent = t(pct === 100 ? "done_perfect" : pct >= 70 ? "done_good" : "done_keep");
+    $("#done-score").textContent = t("done_score", { n: firstTry, x: session.total, p: pct });
     $("#done-mistakes").innerHTML = session.mistakes.length
-      ? `<h3>Review your mistakes</h3><ul class="mistakes">${session.mistakes.map((m) => `
+      ? `<h3>${esc(t("review"))}</h3><ul class="mistakes">${session.mistakes.map((m) => `
           <li><div class="muted">${esc(m.prompt)}</div>
           <div><span class="bad">${esc(m.given)}</span> → <span class="good">${esc(m.right)}</span></div></li>`).join("")}</ul>`
       : "";
@@ -428,7 +475,7 @@
       <label class="lang-card">
         <input type="radio" name="lang" value="${code}" ${code === lang ? "checked" : ""}>
         <span class="flag">${info.flag}</span>
-        <span><b>${esc(info.name)}</b><br><span class="muted">German ↔ ${esc(info.english)}</span></span>
+        <span><b>${esc(info.name)}</b><br><span class="muted">Deutsch ↔ ${esc(info.name)}</span></span>
       </label>`).join("");
     $$("#level-options input").forEach((r) => { r.checked = r.value === level; });
     const counts = {};
@@ -437,8 +484,10 @@
       total += window.Levels.parseLevel(window.LEVELS[name], name).words.length;
       counts[name] = total;
     }
-    $$("#level-options [data-count]").forEach((el) => { el.textContent = counts[el.dataset.count] + " words"; });
+    $$("#level-options [data-count]").forEach((el) => { el.textContent = t("n_words", { n: counts[el.dataset.count] }); });
     $("#custom-count").textContent = custom.vocab.length;
+    $("#about-stats").textContent = `Goethe A1–C1 · ${Object.keys(L.LANGS).length} × 🌐 · ` +
+      `${t("n_words", { n: total })} · ${window.GRAMMAR.length} Grammatik-Themen`;
   }
   $("#lang-options").addEventListener("change", (e) => {
     if (e.target.name !== "lang") return;
@@ -448,16 +497,19 @@
     updateLangUI();
     updateAvailable();
     renderVocab();
+    renderSettings();
   });
 
-  // Texts that mention the translation language.
+  // Puts all interface texts into the selected language.
   function updateLangUI() {
     const info = langInfo();
-    $("#brand-lang").textContent = `${info.flag} ${info.name}`;
-    $("#lang-now").textContent = `${info.flag} ${info.name}`;
-    $("#vocab-search").placeholder = `Search German or ${info.english}…`;
-    $("#add-word-form [name=tr]").placeholder = `${info.english} translation`;
-    document.documentElement.lang = "de";
+    $$("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
+    $$("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
+    $("#brand-lang").textContent = info.name;
+    $("#lang-now").textContent = info.flag;
+    $("#lang-now").title = info.name;
+    $("#vocab-search").placeholder = t("search");
+    if (!session) $("#check-btn").textContent = t("check");
   }
 
   $("#level-options").addEventListener("change", (e) => {
@@ -478,8 +530,8 @@
         .map((w) => ({ de: w.de, type: w.type, tr: w.tr || { ro: w.ro } })) };
       saveCustom();
       renderSettings();
-      alert(`Restored ${custom.vocab.length} of your own words.`);
-    } catch (err) { alert("This is not a valid backup file."); }
+      alert(t("restored", { n: custom.vocab.length }));
+    } catch (err) { alert(t("bad_backup")); }
     e.target.value = "";
   });
 
@@ -493,7 +545,7 @@
   $("#export-json").addEventListener("click", () =>
     download("deutsch-my-words.json", JSON.stringify(custom, null, 2), "application/json"));
   $("#reset-btn").addEventListener("click", () => {
-    if (!confirm("Delete all the words you added yourself?")) return;
+    if (!confirm(t("confirm_delete_mine"))) return;
     custom = { vocab: [] };
     saveCustom();
     renderSettings();
@@ -513,7 +565,7 @@
       .filter((c) => c.topics.length);
     $("#grammar-toc").innerHTML = cats.map((c) => `
       <div class="toc-group"><b>${c.icon} ${esc(c.title)}</b>
-        <ul>${c.topics.map((t) => `<li><a href="#${t.id}" data-topic="${t.id}"><span class="lvl lvl-tag">${t.level}</span> ${esc(t.title)}</a></li>`).join("")}</ul>
+        <ul>${c.topics.map((t) => `<li><a href="#${t.id}" data-topic="${t.id}"><span class="lvl lvl-${t.level}">${t.level}</span> ${esc(t.title)}</a></li>`).join("")}</ul>
       </div>`).join("") || `<p class="muted">Keine Treffer.</p>`;
     $("#grammar-list").innerHTML = cats.map((c) => `
       <h2 class="grammar-cat">${c.icon} ${esc(c.title)}</h2>
@@ -551,4 +603,5 @@
   updateLangUI();
   renderVocab();
   updateAvailable();
+  renderSettings();
 })();

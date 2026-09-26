@@ -1,9 +1,21 @@
-# Deutsch lernen – German learning exercises
+# Deutsch Guy – learn German
 
-A small static website to learn German vocabulary and grammar (Goethe levels A1–C1). Translations are available in
-**Romanian, English, French, Russian, Greek and Ukrainian**.
+<img src="assets/deutsch-guy.svg" width="72" alt="Deutsch Guy logo">
+
+**Deutsch Guy** is a small static website to learn German vocabulary and grammar (Goethe levels A1–C1). Translations
+are available in **Romanian, English, French, Russian, Greek and Ukrainian**, and the interface follows the chosen language.
+
+Made by **AX Tech**. The AX Tech logos in `assets/brand/` come unchanged from the AX Tech brand kit.
 
 Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don't need to install or build anything.
+
+## Design
+
+- Dark navy interface with a sidebar menu, which becomes a bottom tab bar on phones.
+- The vocabulary page has a Berlin skyline hero, a stats strip and colour-coded columns with level chips.
+- Clicking a word opens its details: all six translations, word type, level and irregular forms.
+- `assets/deutsch-guy.svg` is the Deutsch Guy logo and favicon. "made by AX Tech" appears in the sidebar, the footer and Settings.
+- Interface texts are in `js/i18n.js`.
 
 ## Tabs
 
