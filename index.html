@@ -8,10 +8,11 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">🇩🇪 Deutsch <span>↔</span> 🇷🇴 Română</div>
+    <div class="brand">🇩🇪 Deutsch <span class="arrow">↔</span> <span id="brand-lang">🇷🇴 Română</span></div>
     <nav class="tabs" role="tablist">
       <button class="tab active" data-view="vocab" role="tab">Vocabulary</button>
       <button class="tab" data-view="exercises" role="tab">Exercises</button>
+      <button class="tab" data-view="grammar" role="tab">Grammar</button>
       <button class="tab" data-view="settings" role="tab">Settings</button>
     </nav>
   </header>
@@ -20,18 +21,19 @@
     <!-- ============ VOCABULARY ============ -->
     <section id="view-vocab" class="view active">
       <div class="level-bar">
-        Goethe vocabulary level <b id="level-now" class="lvl-big">B1</b>
-        <a href="#" data-goto="settings">Change level</a>
+        Goethe level <b id="level-now" class="lvl-big">B1</b>
+        · Translation <b id="lang-now">🇷🇴 Română</b>
+        <a href="#" data-goto="settings">Change</a>
       </div>
 
       <div class="toolbar">
-        <input id="vocab-search" type="search" placeholder="Search German or Romanian…">
+        <input id="vocab-search" type="search" placeholder="Search…">
         <button id="add-word-btn" class="btn secondary">+ Add word</button>
       </div>
 
       <form id="add-word-form" class="card add-form hidden">
         <input name="de" placeholder="German (e.g. der Hund, lernen)" required>
-        <input name="ro" placeholder="Romanian (e.g. câinele, a învăța)" required>
+        <input name="tr" placeholder="Translation" required>
         <select name="type">
           <option value="verb">Verb</option>
           <option value="noun">Noun</option>
@@ -66,8 +68,8 @@
         <div class="field" id="field-dir">
           <label>Direction</label>
           <div class="seg" data-name="dir">
-            <button data-value="de-ro" class="active">German → Romanian</button>
-            <button data-value="ro-de">Romanian → German</button>
+            <button data-value="de-ro" class="active">German → <span class="lang-name">Romanian</span></button>
+            <button data-value="ro-de"><span class="lang-name">Romanian</span> → German</button>
             <button data-value="mixed">Mixed</button>
           </div>
         </div>
@@ -150,29 +152,68 @@
       </div>
     </section>
 
+    <!-- ============ GRAMMAR ============ -->
+    <section id="view-grammar" class="view">
+      <div class="grammar-head card">
+        <h2>Grammatik</h2>
+        <p class="muted">The grammar topics of the Goethe exams (A1–C1), explained in German, with tables and examples.</p>
+        <div class="toolbar">
+          <input id="grammar-search" type="search" placeholder="Suchen … (z. B. Dativ, Futur, weil)">
+        </div>
+        <div class="seg small" id="grammar-levels">
+          <button data-value="all" class="active">Alle</button>
+          <button data-value="A1">A1</button>
+          <button data-value="A2">A2</button>
+          <button data-value="B1">B1</button>
+          <button data-value="B2">B2</button>
+          <button data-value="C1">C1</button>
+        </div>
+      </div>
+      <nav id="grammar-toc" class="grammar-toc"></nav>
+      <div id="grammar-list"></div>
+    </section>
+
     <!-- ============ SETTINGS ============ -->
     <section id="view-settings" class="view">
       <div class="card">
+        <h2>Translation language</h2>
+        <p class="muted">German is always the language you learn. Choose the language for translations and exercises.</p>
+        <div id="lang-options" class="lang-options"></div>
+      </div>
+
+      <div class="card">
         <h2>Vocabulary level</h2>
-        <p class="muted">Every level includes the levels below it, so B2 = B1 + B2 and C1 = B1 + B2 + C1.
+        <p class="muted">Every level includes the levels below it, so B1 = A1 + A2 + B1.
           All exercises only use words from the level you choose.</p>
         <div id="level-options" class="level-options">
           <label class="level-card">
+            <input type="radio" name="level" value="A1">
+            <span class="lvl-big">A1</span>
+            <span><b>Beginner</b><br><span class="muted">Goethe-Zertifikat A1: first words, family, food, time</span></span>
+            <span class="muted" data-count="A1"></span>
+          </label>
+          <label class="level-card">
+            <input type="radio" name="level" value="A2">
+            <span class="lvl-big">A2</span>
+            <span><b>Elementary</b><br><span class="muted">Goethe-Zertifikat A2: everyday life, travel, health, work</span></span>
+            <span class="muted" data-count="A2"></span>
+          </label>
+          <label class="level-card">
             <input type="radio" name="level" value="B1">
             <span class="lvl-big">B1</span>
-            <span><b>Intermediate</b><br><span class="muted">Goethe-Zertifikat B1 word list (includes A1 + A2)</span></span>
+            <span><b>Intermediate</b><br><span class="muted">Goethe-Zertifikat B1 word list</span></span>
             <span class="muted" data-count="B1"></span>
           </label>
           <label class="level-card">
             <input type="radio" name="level" value="B2">
             <span class="lvl-big">B2</span>
-            <span><b>Upper intermediate</b><br><span class="muted">B1 + work, society, media, environment</span></span>
+            <span><b>Upper intermediate</b><br><span class="muted">Work, society, media, environment</span></span>
             <span class="muted" data-count="B2"></span>
           </label>
           <label class="level-card">
             <input type="radio" name="level" value="C1">
             <span class="lvl-big">C1</span>
-            <span><b>Advanced</b><br><span class="muted">B2 + academic and formal language</span></span>
+            <span><b>Advanced</b><br><span class="muted">Academic and formal language</span></span>
             <span class="muted" data-count="C1"></span>
           </label>
         </div>
@@ -180,8 +221,8 @@
 
       <div class="card">
         <h3>My own words (<span id="custom-count">0</span>)</h3>
-        <p class="muted">Words you add with “+ Add word” are saved in this browser and included at every level.
-          Download a backup to move them to another device.</p>
+        <p class="muted">Words you add with “+ Add word” are saved in this browser and included at every level
+          (in the translation language you had selected when adding them).</p>
         <div class="row">
           <button id="export-json" class="btn secondary">Download backup</button>
           <label class="btn secondary file-btn">Restore backup<input type="file" id="import-backup" accept=".json" hidden></label>
@@ -191,11 +232,14 @@
     </section>
   </main>
 
+  <script src="js/levels/a1.js"></script>
+  <script src="js/levels/a2.js"></script>
   <script src="js/levels/b1.js"></script>
   <script src="js/levels/b2.js"></script>
   <script src="js/levels/c1.js"></script>
   <script src="js/levels/index.js"></script>
   <script src="js/lang.js"></script>
+  <script src="js/grammar.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
