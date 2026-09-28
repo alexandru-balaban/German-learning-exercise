@@ -66,41 +66,76 @@
   });
 
   // ---------------- vocabulary page ----------------
+  const sortDe = (a, b) => a.de.replace(/^(der|die|das|sich) /i, "").localeCompare(b.de.replace(/^(der|die|das|sich) /i, ""), "de");
+  const matches = (w, q) => !q || L.fold(w.de).includes(q) || L.fold(w.tr, lang).includes(q);
+
+  // One vocabulary row; the level chip uses the accent colour for words of the current level.
+  function wordRow(w) {
+    return `<li data-word="${w.level === "mine" ? "mine:" + w.customIndex : esc(w.de) + "|" + w.type}">
+      <span class="de">${articleHtml(w.de)}</span>
+      <span class="tr">${esc(w.tr)}</span>
+      ${w.level === "mine" ? `<button class="icon-btn del" data-del="${w.customIndex}" title="✕">🗑</button>`
+        : `<span class="lvl${w.level === level ? " current" : ""}">${w.level}</span>`}
+      ${icon("chevron", "chev")}
+    </li>`;
+  }
+
   function renderVocab() {
     $("#level-now").textContent = level;
     const q = L.fold($("#vocab-search").value || "");
     const groups = $("#vocab-groups");
     groups.innerHTML = "";
-    const stats = [];
     for (const type of L.TYPES) {
       const all = data.vocab.filter((w) => w.type === type);
-      stats.push({ type, icon: type, n: all.length, label: t("st_" + type) });
       if (type === "other" && !all.length) continue;
-      const words = all
-        .filter((w) => !q || L.fold(w.de).includes(q) || L.fold(w.tr, lang).includes(q))
-        .sort((a, b) => a.de.replace(/^(der|die|das|sich) /i, "").localeCompare(b.de.replace(/^(der|die|das|sich) /i, ""), "de"));
+      const words = all.filter((w) => matches(w, q)).sort(sortDe);
       const card = document.createElement("div");
-      card.className = "card group group-" + type;
+      card.className = "card group";
       card.innerHTML = `
-        <div class="group-head">${icon(type)}
-          <div><h3>${esc(t("g_" + type))}</h3><p>${esc(t("s_" + type))}</p></div>
-          <span class="count">${all.length}</span>
-        </div>` +
-        (words.length ? `<ul class="words">${words.map((w) => `
-          <li data-word="${w.level === "mine" ? "mine:" + w.customIndex : esc(w.de) + "|" + w.type}">
-            <span class="de">${articleHtml(w.de)}</span>
-            <span class="tr">${esc(w.tr)}</span>
-            ${w.level === "mine" ? `<button class="icon-btn del" data-del="${w.customIndex}" title="✕">🗑</button>`
-              : `<span class="lvl lvl-${w.level}">${w.level}</span>`}
-            ${icon("chevron", "chev")}
-          </li>`).join("")}</ul>` : `<p class="muted empty">${q ? t("no_matches") : t("no_words")}</p>`);
+        <button class="group-head" data-open="${type}" title="${esc(t("g_" + type))}">${icon(type)}
+          <span><span class="gh-title">${esc(t("g_" + type))}</span><span class="gh-sub">${esc(t("s_" + type))}</span></span>
+          <span class="count">${all.length}</span>${icon("expand", "expand")}
+        </button>` +
+        (words.length ? `<ul class="words">${words.map(wordRow).join("")}</ul>`
+          : `<p class="muted empty">${q ? t("no_matches") : t("no_words")}</p>`);
       groups.appendChild(card);
     }
-    stats.push({ type: "sentence", icon: "sentence", n: data.sentences.length, label: t("st_sentences") });
-    $("#vocab-stats").innerHTML = stats.map((x) =>
-      `<div class="stat">${icon(x.icon, "c-" + x.type)}<div><b>${x.n}</b><span>${esc(x.label)}</span></div></div>`).join("");
     $("#basics-list").textContent = L.BASICS.join(", ");
+    if (openType) renderPanel();
   }
+
+  // ---------------- one category, full screen ----------------
+  let openType = null;
+  function openGroup(type) {
+    openType = type;
+    $("#panel-search").value = $("#vocab-search").value;
+    $("#panel-search").placeholder = t("search");
+    $("#panel-close").title = t("close");
+    $("#group-panel").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    renderPanel();
+    $("#panel-search").focus();
+  }
+  function renderPanel() {
+    const all = data.vocab.filter((w) => w.type === openType);
+    const q = L.fold($("#panel-search").value || "");
+    const words = all.filter((w) => matches(w, q)).sort(sortDe);
+    $("#panel-title").innerHTML = `${icon(openType)}<h2>${esc(t("g_" + openType))}</h2><span class="count">${all.length}</span>`;
+    $("#panel-words").innerHTML = words.length ? words.map(wordRow).join("") : `<p class="muted empty">${t("no_matches")}</p>`;
+  }
+  function closeGroup() {
+    openType = null;
+    $("#group-panel").classList.add("hidden");
+    document.body.style.overflow = "";
+  }
+  $("#panel-search").addEventListener("input", renderPanel);
+  $("#panel-close").addEventListener("click", closeGroup);
+  $("#panel-words").addEventListener("click", (e) => {
+    const del = e.target.closest("[data-del]");
+    const row = e.target.closest("[data-word]");
+    if (del) return deleteMine(+del.dataset.del);
+    if (row) openWord(row.dataset.word);
+  });
   function articleHtml(de) {
     const m = de.match(/^(der|die|das)\s+(.*)$/i);
     if (!m) return esc(de);
@@ -109,18 +144,21 @@
 
   $("#vocab-search").addEventListener("input", renderVocab);
   $("#vocab-groups").addEventListener("click", (e) => {
+    const head = e.target.closest("[data-open]");
     const del = e.target.closest("[data-del]");
     const row = e.target.closest("[data-word]");
-    if (!del && row) return openWord(row.dataset.word);
-    if (del) {
-      const w = custom.vocab[+del.dataset.del];
-      if (w && confirm(t("confirm_delete", { x: w.de }))) {
-        custom.vocab.splice(+del.dataset.del, 1);
-        saveCustom();
-        renderVocab();
-      }
-    }
+    if (head) return openGroup(head.dataset.open);
+    if (del) return deleteMine(+del.dataset.del);
+    if (row) openWord(row.dataset.word);
   });
+  function deleteMine(i) {
+    const w = custom.vocab[i];
+    if (w && confirm(t("confirm_delete", { x: w.de }))) {
+      custom.vocab.splice(i, 1);
+      saveCustom();
+      renderVocab();
+    }
+  }
   $("#add-word-btn").addEventListener("click", () => $("#add-word-form").classList.toggle("hidden"));
   $("#add-word-form").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -149,7 +187,7 @@
       <li class="${code === lang ? "current" : ""}"><span class="flag">${info.flag}</span><span class="muted">${esc(info.name)}</span><span>${esc(w.tr[code])}</span></li>`).join("");
     $("#modal-body").innerHTML = `
       <h2>${articleHtml(w.de)}</h2>
-      <div class="meta"><span class="badge">${esc(t("t_" + w.type))}</span>${w.level !== "mine" ? `<span class="lvl lvl-${w.level}">${w.level}</span>` : ""}</div>
+      <div class="meta"><span class="badge">${esc(t("t_" + w.type))}</span>${w.level !== "mine" ? `<span class="lvl${w.level === level ? " current" : ""}">${w.level}</span>` : ""}</div>
       <h3>${esc(t("all_translations"))}</h3>
       <ul class="tr-list">${rows}</ul>
       ${w.forms ? `<h3 style="margin-top:16px">${esc(t("forms"))}</h3><p class="muted">${w.forms.map(esc).join(", ")}</p>` : ""}`;
@@ -159,7 +197,11 @@
   const closeModal = () => $("#word-modal").classList.add("hidden");
   $("#modal-close").addEventListener("click", closeModal);
   $("#word-modal").addEventListener("click", (e) => { if (e.target.id === "word-modal") closeModal(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    if (!$("#word-modal").classList.contains("hidden")) closeModal();
+    else if (openType) closeGroup();
+  });
 
   // ---------------- exercise setup ----------------
   const settings = { mode: "words", dir: "de-ro", count: 10, scope: "all" };
@@ -486,8 +528,6 @@
     }
     $$("#level-options [data-count]").forEach((el) => { el.textContent = t("n_words", { n: counts[el.dataset.count] }); });
     $("#custom-count").textContent = custom.vocab.length;
-    $("#about-stats").textContent = `Goethe A1–C1 · ${Object.keys(L.LANGS).length} × 🌐 · ` +
-      `${t("n_words", { n: total })} · ${window.GRAMMAR.length} Grammatik-Themen`;
   }
   $("#lang-options").addEventListener("change", (e) => {
     if (e.target.name !== "lang") return;
@@ -565,7 +605,7 @@
       .filter((c) => c.topics.length);
     $("#grammar-toc").innerHTML = cats.map((c) => `
       <div class="toc-group"><b>${c.icon} ${esc(c.title)}</b>
-        <ul>${c.topics.map((t) => `<li><a href="#${t.id}" data-topic="${t.id}"><span class="lvl lvl-${t.level}">${t.level}</span> ${esc(t.title)}</a></li>`).join("")}</ul>
+        <ul>${c.topics.map((t) => `<li><a href="#${t.id}" data-topic="${t.id}"><span class="lvl${t.level === level ? " current" : ""}">${t.level}</span> ${esc(t.title)}</a></li>`).join("")}</ul>
       </div>`).join("") || `<p class="muted">Keine Treffer.</p>`;
     $("#grammar-list").innerHTML = cats.map((c) => `
       <h2 class="grammar-cat">${c.icon} ${esc(c.title)}</h2>

@@ -5,16 +5,22 @@
 **Deutsch Guy** is a small static website to learn German vocabulary and grammar (Goethe levels A1–C1). Translations
 are available in **Romanian, English, French, Russian, Greek and Ukrainian**, and the interface follows the chosen language.
 
-Made by **AX Tech**. The AX Tech logos in `assets/brand/` come unchanged from the AX Tech brand kit.
+Made by **AX Tech**.
 
 Open `index.html` in a browser (or turn on GitHub Pages for this repo). You don't need to install or build anything.
 
 ## Design
 
-- Dark navy interface with a sidebar menu, which becomes a bottom tab bar on phones.
-- The vocabulary page has a Berlin skyline hero, a stats strip and colour-coded columns with level chips.
-- Clicking a word opens its details: all six translations, word type, level and irregular forms.
-- `assets/deutsch-guy.svg` is the Deutsch Guy logo and favicon. "made by AX Tech" appears in the sidebar, the footer and Settings.
+The design follows the frontend-design skill in `.claude/skills/frontend-design/`.
+
+- Colours: a navy base, one main colour (Deutsch blue `#3D7BFF`, from the logo) and one accent colour (flag gold `#FFC83D`).
+  Green and red are only used for right and wrong answers. Articles: **der** blue, **die** gold, **das** white and underlined.
+- Type: Barlow Condensed for headlines and Barlow for text. They are close to DIN, the lettering on German road signs.
+- Layout: sidebar menu (a bottom tab bar on phones) and a Berlin skyline hero. Each vocabulary category is a card, and
+  clicking its header opens the category full screen with its own search. Clicking a word shows all six translations,
+  the word type, the level and irregular forms.
+- `assets/deutsch-guy.svg` is the Deutsch Guy logo and favicon. The AX Tech logo appears once, in the footer, and is
+  used unchanged from the AX Tech brand kit.
 - Interface texts are in `js/i18n.js`.
 
 ## Tabs
