@@ -19,6 +19,18 @@
   const langName = (code) => (window.I18N_LANG_NAMES[lang] || window.I18N_LANG_NAMES.en)[code];
   const icon = (id, cls = "") => `<svg class="ic ${cls}"><use href="#i-${id}"/></svg>`;
 
+  // Small SVG flags (emoji flags show up as plain letters on Windows).
+  const FLAGS = {
+    de: '<svg viewBox="0 0 30 18"><path fill="#1A1A1A" d="M0 0h30v6H0z"/><path fill="#DD0000" d="M0 6h30v6H0z"/><path fill="#FFCE00" d="M0 12h30v6H0z"/></svg>',
+    ro: '<svg viewBox="0 0 30 20"><path fill="#002B7F" d="M0 0h10v20H0z"/><path fill="#FCD116" d="M10 0h10v20H10z"/><path fill="#CE1126" d="M20 0h10v20H20z"/></svg>',
+    fr: '<svg viewBox="0 0 30 20"><path fill="#0055A4" d="M0 0h10v20H0z"/><path fill="#fff" d="M10 0h10v20H10z"/><path fill="#EF4135" d="M20 0h10v20H20z"/></svg>',
+    ru: '<svg viewBox="0 0 30 20"><path fill="#fff" d="M0 0h30v7H0z"/><path fill="#0039A6" d="M0 7h30v6H0z"/><path fill="#D52B1E" d="M0 13h30v7H0z"/></svg>',
+    uk: '<svg viewBox="0 0 30 20"><path fill="#0057B7" d="M0 0h30v10H0z"/><path fill="#FFD700" d="M0 10h30v10H0z"/></svg>',
+    el: '<svg viewBox="0 0 27 18"><path fill="#0D5EAF" d="M0 0h27v18H0z"/><path stroke="#fff" stroke-width="2" d="M10 3h17M10 7h17M0 11h27M0 15h27"/><path fill="#0D5EAF" d="M0 0h10v10H0z"/><path stroke="#fff" stroke-width="2" d="M5 0v10M0 5h10"/></svg>',
+    en: '<svg viewBox="0 0 60 30"><g><path fill="#012169" d="M0 0h60v30H0z"/><path stroke="#fff" stroke-width="6" d="M0 0l60 30M60 0 0 30"/><path stroke="#C8102E" stroke-width="2.5" d="M0 0l60 30M60 0 0 30"/><path stroke="#fff" stroke-width="10" d="M30 0v30M0 15h60"/><path stroke="#C8102E" stroke-width="6" d="M30 0v30M0 15h60"/></g></svg>',
+  };
+  const flag = (code) => `<span class="flag">${FLAGS[code] || ""}</span>`;
+
   // ---------------- data ----------------
   // Level vocabulary comes from js/levels/*.js; words the user adds are kept in localStorage.
   const store = {
@@ -74,7 +86,7 @@
     return `<li data-word="${w.level === "mine" ? "mine:" + w.customIndex : esc(w.de) + "|" + w.type}">
       <span class="de">${articleHtml(w.de)}</span>
       <span class="tr">${esc(w.tr)}</span>
-      ${w.level === "mine" ? `<button class="icon-btn del" data-del="${w.customIndex}" title="✕">🗑</button>`
+      ${w.level === "mine" ? `<button class="icon-btn del" data-del="${w.customIndex}" aria-label="✕">${icon("trash")}</button>`
         : `<span class="lvl${w.level === level ? " current" : ""}">${w.level}</span>`}
       ${icon("chevron", "chev")}
     </li>`;
@@ -184,7 +196,7 @@
     }
     if (!w) return;
     const rows = Object.entries(L.LANGS).filter(([code]) => w.tr[code]).map(([code, info]) => `
-      <li class="${code === lang ? "current" : ""}"><span class="flag">${info.flag}</span><span class="muted">${esc(info.name)}</span><span>${esc(w.tr[code])}</span></li>`).join("");
+      <li class="${code === lang ? "current" : ""}">${flag(code)}<span class="muted">${esc(info.name)}</span><span>${esc(w.tr[code])}</span></li>`).join("");
     $("#modal-body").innerHTML = `
       <h2>${articleHtml(w.de)}</h2>
       <div class="meta"><span class="badge">${esc(t("t_" + w.type))}</span>${w.level !== "mine" ? `<span class="lvl${w.level === level ? " current" : ""}">${w.level}</span>` : ""}</div>
@@ -199,6 +211,7 @@
   $("#word-modal").addEventListener("click", (e) => { if (e.target.id === "word-modal") closeModal(); });
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
+    if (!langMenu.classList.contains("hidden")) return toggleLangMenu(false);
     if (!$("#word-modal").classList.contains("hidden")) closeModal();
     else if (openType) closeGroup();
   });
@@ -290,11 +303,12 @@
     const q = session.queue.shift();
     session.current = q;
     session.answered = false;
-    $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
+    showProgress();
     setFeedback(null);
     const isGap = !!q.gap;
     $("#answer-choices").classList.toggle("hidden", !isGap);
     $("#q-hint").classList.toggle("hidden", !isGap);
+    $("#q-prompt").classList.toggle("long", isGap || !!q.sentence);
     if (isGap) return showGap(q);
     const fromDe = q.dir === "de-ro";
     const src = fromDe ? q.item.de : q.item.tr;
@@ -302,11 +316,11 @@
     q.targetLang = fromDe ? lang : "de";
     q.promptText = q.sentence ? first(src, true) : src;
 
-    $("#q-label").textContent = t("translate_into", { x: fromDe ? langName(lang) : langName("de") }) + " " + (fromDe ? langInfo().flag : "🇩🇪");
+    $("#q-label").innerHTML = esc(t("translate_into", { x: fromDe ? langName(lang) : langName("de") })) + " " + flag(fromDe ? lang : "de");
     $("#q-prompt").textContent = q.promptText;
     $("#q-type").textContent = q.sentence ? t("b_sentence") : t("t_" + q.item.type);
     $("#q-type").className = "badge badge-" + (q.sentence ? "sentence" : q.item.type);
-    $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
+    showProgress();
 
     const useBank = q.sentence && $("#use-bank").checked;
     $("#answer-typing").classList.toggle("hidden", useBank);
@@ -315,6 +329,8 @@
     input.value = "";
     input.disabled = false;
     input.placeholder = t("type_in", { x: langName(fromDe ? lang : "de") });
+    input.classList.toggle("single", !q.sentence);
+    input.rows = q.sentence ? 3 : 1;
     $("#special-chars").innerHTML = (q.targetLang === "de" ? ["ä", "ö", "ü", "ß"] : langInfo().chars)
       .map((c) => `<button type="button" data-char="${c}">${c}</button>`).join("");
     if (useBank) buildBank(q);
@@ -337,7 +353,7 @@
     $("#q-prompt").innerHTML = gapHtml(g);
     $("#q-type").textContent = g.kind === "connector" ? t("t_connector") : t("b_preposition");
     $("#q-type").className = "badge badge-" + g.kind;
-    $("#q-hint").textContent = langInfo().flag + " " + g.hint;
+    $("#q-hint").innerHTML = flag(lang) + " " + esc(g.hint);
     $("#answer-typing").classList.add("hidden");
     $("#answer-bank").classList.add("hidden");
     $("#answer-choices").innerHTML = q.choices.map((c, i) =>
@@ -374,16 +390,16 @@
     if (ok) {
       session.correct++;
       session.done++;
-      setFeedback("right", t("correct"), `<div>${esc(full)}</div><div class="muted-light">💡 ${esc(g.rule)}</div>`);
+      setFeedback("right", t("correct"), `<div>${esc(full)}</div><div class="rule">${icon("bulb")}${esc(g.rule)}</div>`);
     } else {
       session.mistakes.push({ prompt: g.de, given, right: g.answer });
       if (!session.retried.has(q)) { session.retried.add(q); session.queue.push(q); }
       else session.done++;
       setFeedback("wrong", t("wrong"),
         `<div>${esc(t("correct_answer"))}</div><div class="right-answer">${esc(g.answer)}</div>` +
-        `<div>${esc(full)}</div><div>💡 ${esc(g.rule)}</div>`);
+        `<div>${esc(full)}</div><div class="rule">${icon("bulb")}${esc(g.rule)}</div>`);
     }
-    $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
+    showProgress();
   }
 
   function buildBank(q) {
@@ -433,10 +449,15 @@
     return $("#answer-input").value;
   }
 
+  function showProgress() {
+    $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
+    $("#run-count").textContent = `${Math.min(session.done + 1, session.total)} / ${session.total}`;
+  }
+
   function setFeedback(state, title, detail) {
     const fb = $("#feedback");
     fb.className = "feedback" + (state ? " " + state : "");
-    $("#fb-title").innerHTML = title || "";
+    $("#fb-title").innerHTML = state ? icon(state === "right" ? "check" : "x") + esc(title) : "";
     $("#fb-detail").innerHTML = detail || "";
     $("#check-btn").textContent = state ? t("continue") : t("check");
   }
@@ -480,7 +501,7 @@
         (noteText(res) ? `<div>${esc(noteText(res))}</div>` : "") +
         `<div>${esc(t("correct_answer"))}</div><div class="right-answer">${esc(q.sentence ? first(q.target, true) : q.target)}</div>`);
     }
-    $("#progress-bar").style.width = (100 * session.done / session.total) + "%";
+    showProgress();
   }
   $("#check-btn").addEventListener("click", check);
   $("#answer-input").addEventListener("keydown", (e) => {
@@ -506,19 +527,14 @@
     $("#done-mistakes").innerHTML = session.mistakes.length
       ? `<h3>${esc(t("review"))}</h3><ul class="mistakes">${session.mistakes.map((m) => `
           <li><div class="muted">${esc(m.prompt)}</div>
-          <div><span class="bad">${esc(m.given)}</span> → <span class="good">${esc(m.right)}</span></div></li>`).join("")}</ul>`
+          <div><span class="m-bad">${esc(m.given)}</span> → <span class="m-good">${esc(m.right)}</span></div></li>`).join("")}</ul>`
       : "";
     session = null;
   }
 
   // ---------------- settings ----------------
   function renderSettings() {
-    $("#lang-options").innerHTML = Object.entries(L.LANGS).map(([code, info]) => `
-      <label class="lang-card">
-        <input type="radio" name="lang" value="${code}" ${code === lang ? "checked" : ""}>
-        <span class="flag">${info.flag}</span>
-        <span><b>${esc(info.name)}</b><br><span class="muted">Deutsch ↔ ${esc(info.name)}</span></span>
-      </label>`).join("");
+    $("#lang-options").innerHTML = langItems("radio");
     $$("#level-options input").forEach((r) => { r.checked = r.value === level; });
     const counts = {};
     let total = 0;
@@ -529,16 +545,48 @@
     $$("#level-options [data-count]").forEach((el) => { el.textContent = t("n_words", { n: counts[el.dataset.count] }); });
     $("#custom-count").textContent = custom.vocab.length;
   }
-  $("#lang-options").addEventListener("change", (e) => {
-    if (e.target.name !== "lang") return;
-    lang = e.target.value;
+  // The same list is used in Settings (radio buttons) and in the top-bar menu (buttons).
+  function langItems(kind) {
+    return Object.entries(L.LANGS).map(([code, info]) => kind === "radio"
+      ? `<label class="lang-chip"><input type="radio" name="lang" value="${code}" ${code === lang ? "checked" : ""}>${flag(code)}<span>${esc(info.name)}</span></label>`
+      : `<button class="lang-item${code === lang ? " current" : ""}" role="menuitemradio" aria-checked="${code === lang}" data-lang="${code}">${flag(code)}<span>${esc(info.name)}</span>${code === lang ? icon("check") : ""}</button>`).join("");
+  }
+  function setLang(code) {
+    if (!L.LANGS[code] || code === lang) return;
+    lang = code;
     store.set(LANG_KEY, lang);
     rebuildData();
     updateLangUI();
     updateAvailable();
     renderVocab();
     renderSettings();
+    if ($("#view-grammar").classList.contains("active")) renderGrammar();
+  }
+  $("#lang-options").addEventListener("change", (e) => { if (e.target.name === "lang") setLang(e.target.value); });
+
+  // Top-bar language menu
+  const langMenu = $("#lang-menu");
+  function toggleLangMenu(open) {
+    const show = open ?? langMenu.classList.contains("hidden");
+    if (show) {
+      langMenu.innerHTML = langItems("menu");
+      const r = $("#lang-btn").getBoundingClientRect();
+      langMenu.style.top = r.bottom + 8 + "px";
+      langMenu.style.right = Math.max(8, innerWidth - r.right) + "px";
+    }
+    langMenu.classList.toggle("hidden", !show);
+    $("#lang-btn").setAttribute("aria-expanded", show);
+    if (show) langMenu.querySelector(".current").focus();
+  }
+  $("#lang-btn").addEventListener("click", (e) => { e.stopPropagation(); toggleLangMenu(); });
+  langMenu.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-lang]");
+    if (!b) return;
+    setLang(b.dataset.lang);
+    toggleLangMenu(false);
+    $("#lang-btn").focus();
   });
+  document.addEventListener("click", (e) => { if (!langMenu.contains(e.target)) toggleLangMenu(false); });
 
   // Puts all interface texts into the selected language.
   function updateLangUI() {
@@ -546,8 +594,8 @@
     $$("[data-i18n]").forEach((el) => { el.textContent = t(el.dataset.i18n); });
     $$("[data-i18n-ph]").forEach((el) => { el.placeholder = t(el.dataset.i18nPh); });
     $("#brand-lang").textContent = info.name;
-    $("#lang-now").textContent = info.flag;
-    $("#lang-now").title = info.name;
+    $("#lang-now").innerHTML = flag(lang) + `<span class="lang-now-name">${esc(info.name)}</span>`;
+    $("#lang-btn").title = info.name;
     $("#vocab-search").placeholder = t("search");
     if (!session) $("#check-btn").textContent = t("check");
   }
@@ -593,6 +641,7 @@
 
   // ---------------- grammar ----------------
   let grammarLevel = "all";
+  const CAT_ICONS = { verben: "verb", nomen: "noun", pronomen: "person", adjektive: "adverb", praepositionen: "pin", satzbau: "connector" };
   // Escapes text and turns **bold** into <b>bold</b>.
   const md = (t) => esc(t).replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
 
@@ -604,11 +653,11 @@
     const cats = window.GRAMMAR_CATEGORIES.map((c) => ({ ...c, topics: topics.filter((t) => t.cat === c.id) }))
       .filter((c) => c.topics.length);
     $("#grammar-toc").innerHTML = cats.map((c) => `
-      <div class="toc-group"><b>${c.icon} ${esc(c.title)}</b>
+      <div class="toc-group"><b>${icon(CAT_ICONS[c.id])} ${esc(c.title)}</b>
         <ul>${c.topics.map((t) => `<li><a href="#${t.id}" data-topic="${t.id}"><span class="lvl${t.level === level ? " current" : ""}">${t.level}</span> ${esc(t.title)}</a></li>`).join("")}</ul>
       </div>`).join("") || `<p class="muted">Keine Treffer.</p>`;
     $("#grammar-list").innerHTML = cats.map((c) => `
-      <h2 class="grammar-cat">${c.icon} ${esc(c.title)}</h2>
+      <h2 class="grammar-cat">${icon(CAT_ICONS[c.id])} ${esc(c.title)}</h2>
       ${c.topics.map((t) => `
         <details class="card grammar-topic" id="${t.id}" ${q ? "open" : ""}>
           <summary><span class="lvl-big small">${t.level}</span> <span class="g-title">${esc(t.title)}</span></summary>

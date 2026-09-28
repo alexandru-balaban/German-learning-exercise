@@ -19,7 +19,11 @@ The design follows the frontend-design skill in `.claude/skills/frontend-design/
 - Layout: sidebar menu (a bottom tab bar on phones) and a Berlin skyline hero. Each vocabulary category is a card, and
   clicking its header opens the category full screen with its own search. Clicking a word shows all six translations,
   the word type, the level and irregular forms.
-- `assets/deutsch-guy.svg` is the Deutsch Guy logo and favicon. The AX Tech logo appears once, in the footer, and is
+- Exercises run in one card: the question, the answer field, then the Check button and the feedback right below it,
+  with a progress bar and a "3 / 10" counter on top.
+- The language is picked from a small menu with flags in the top bar, or from compact chips in Settings.
+  Flags and icons are inline SVG, not emoji.
+- `assets/deutsch-guy.svg` is the Deutsch Guy logo and favicon. The AX Tech wordmark appears once, in the footer, and is
   used unchanged from the AX Tech brand kit.
 - Interface texts are in `js/i18n.js`.
 
