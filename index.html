@@ -10,7 +10,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -30,6 +30,7 @@
     <symbol id="i-connector" viewBox="0 0 24 24"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></symbol>
     <symbol id="i-other" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
     <symbol id="i-sentence" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8L12 3Z"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></symbol>
     <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5M22 9v6"/></symbol>
   </svg>
 
@@ -59,12 +60,7 @@
         <svg class="ic motto-ic"><use href="#i-cap"/></svg>
         <p class="motto-title">Lerne heute, für eine bessere Zukunft!</p>
         <p class="motto-sub">Kleine Schritte, große Ziele.</p>
-        <svg class="motto-mountains" viewBox="0 0 200 70" aria-hidden="true"><path d="M0 70 45 30l20 16 40-40 30 28 20-12 45 48Z"/><path d="M105 6 92 19l8 1 5-5 6 6 7-1Z" class="snow"/></svg>
       </div>
-      <a class="by-ax" href="#" data-goto="settings" title="AX Tech">
-        <span data-i18n="made_by">made by</span>
-        <img src="assets/brand/ax-logo-horizontal-small-dark.svg" alt="AX Tech" height="22">
-      </a>
     </aside>
 
     <main>
@@ -83,7 +79,7 @@
             </g>
             <g class="near">
               <!-- Fernsehturm -->
-              <rect x="252" y="40" width="7" height="180"/><rect x="254" y="8" width="3" height="40"/><circle cx="255.5" cy="80" r="15"/><rect x="248" y="98" width="15" height="6"/>
+              <rect x="252" y="40" width="7" height="180"/><rect x="254" y="8" width="3" height="40"/><circle cx="255.5" cy="80" r="15" class="sphere"/><rect x="248" y="98" width="15" height="6"/>
               <!-- Reichstag -->
               <rect x="300" y="150" width="240" height="70"/><rect x="300" y="128" width="34" height="92"/><rect x="506" y="128" width="34" height="92"/>
               <path d="M360 150 380 132h80l20 18Z"/><path d="M372 132a48 48 0 0 1 96 0Z"/>
@@ -93,11 +89,6 @@
               <rect x="736" y="156" width="10" height="64"/><rect x="764" y="156" width="10" height="64"/><rect x="792" y="156" width="10" height="64"/>
             </g>
             <g class="dome"><path d="M372 132a48 48 0 0 1 96 0" /><path d="M396 88v44M420 84v48M444 88v44M378 112h84"/></g>
-            <!-- flag -->
-            <rect x="848" y="30" width="3" height="190" class="pole"/>
-            <path d="M851 32c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#111"/>
-            <path d="M851 46c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#DD0000"/>
-            <path d="M851 60c16-6 30 6 46 0v14c-16 6-30-6-46 0Z" fill="#FFCE00"/>
           </svg>
         </div>
 
@@ -119,7 +110,6 @@
           <button class="btn" type="submit" data-i18n="save">Save</button>
         </form>
 
-        <div class="stats" id="vocab-stats"></div>
         <div id="vocab-groups" class="groups"></div>
 
         <details class="card basics">
@@ -258,15 +248,15 @@
           <h2 data-i18n="set_level">Vocabulary level</h2>
           <p class="muted" data-i18n="set_level_desc">Every level includes the levels below it.</p>
           <div id="level-options" class="level-options">
-            <label class="level-card"><input type="radio" name="level" value="A1"><span class="lvl-big lvl-bg-A1">A1</span>
+            <label class="level-card"><input type="radio" name="level" value="A1"><span class="lvl-big">A1</span>
               <span><b data-i18n="lv_A1">Beginner</b><br><span class="muted" data-i18n="lvd_A1"></span></span><span class="muted" data-count="A1"></span></label>
-            <label class="level-card"><input type="radio" name="level" value="A2"><span class="lvl-big lvl-bg-A2">A2</span>
+            <label class="level-card"><input type="radio" name="level" value="A2"><span class="lvl-big">A2</span>
               <span><b data-i18n="lv_A2">Elementary</b><br><span class="muted" data-i18n="lvd_A2"></span></span><span class="muted" data-count="A2"></span></label>
-            <label class="level-card"><input type="radio" name="level" value="B1"><span class="lvl-big lvl-bg-B1">B1</span>
+            <label class="level-card"><input type="radio" name="level" value="B1"><span class="lvl-big">B1</span>
               <span><b data-i18n="lv_B1">Intermediate</b><br><span class="muted" data-i18n="lvd_B1"></span></span><span class="muted" data-count="B1"></span></label>
-            <label class="level-card"><input type="radio" name="level" value="B2"><span class="lvl-big lvl-bg-B2">B2</span>
+            <label class="level-card"><input type="radio" name="level" value="B2"><span class="lvl-big">B2</span>
               <span><b data-i18n="lv_B2">Upper intermediate</b><br><span class="muted" data-i18n="lvd_B2"></span></span><span class="muted" data-count="B2"></span></label>
-            <label class="level-card"><input type="radio" name="level" value="C1"><span class="lvl-big lvl-bg-C1">C1</span>
+            <label class="level-card"><input type="radio" name="level" value="C1"><span class="lvl-big">C1</span>
               <span><b data-i18n="lv_C1">Advanced</b><br><span class="muted" data-i18n="lvd_C1"></span></span><span class="muted" data-count="C1"></span></label>
           </div>
         </div>
@@ -281,14 +271,6 @@
           </div>
         </div>
 
-        <div class="card about">
-          <img src="assets/deutsch-guy.svg" alt="" width="56" height="56">
-          <div>
-            <b>Deutsch Guy</b><br>
-            <span class="muted" id="about-stats"></span>
-          </div>
-          <img class="about-ax" src="assets/brand/ax-logo-horizontal-dark.svg" alt="AX Tech" height="40">
-        </div>
       </section>
 
       <footer class="footer">
@@ -296,6 +278,16 @@
         <span class="footer-ax"><span data-i18n="made_by">made by</span> <img src="assets/brand/ax-logo-horizontal-small-dark.svg" alt="AX Tech" height="16"></span>
       </footer>
     </main>
+  </div>
+
+  <!-- One vocabulary category, full screen -->
+  <div id="group-panel" class="panel hidden" role="dialog" aria-modal="true">
+    <div class="panel-head">
+      <div id="panel-title" class="panel-title"></div>
+      <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="panel-search" type="search"></label>
+      <button class="icon-btn" id="panel-close" title="✕">✕</button>
+    </div>
+    <ul id="panel-words" class="panel-words"></ul>
   </div>
 
   <!-- Word details -->
