@@ -31,6 +31,13 @@
     <symbol id="i-other" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></symbol>
     <symbol id="i-sentence" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.8-4.4 4.3 1 6.1L12 17l-5.4 2.8 1-6.1-4.4-4.3 6.1-.8L12 3Z"/></symbol>
     <symbol id="i-expand" viewBox="0 0 24 24"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 4-6.5 8-6.5s7 2 8 6.5"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
     <symbol id="i-cap" viewBox="0 0 24 24"><path d="m2 9 10-5 10 5-10 5L2 9Z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5M22 9v6"/></symbol>
   </svg>
 
@@ -44,9 +51,11 @@
     </a>
     <div class="top-actions">
       <button class="chip chip-level" data-goto="settings"><svg class="ic"><use href="#i-bars"/></svg><span data-i18n="level">Level</span>&nbsp;<b id="level-now">B1</b></button>
-      <button class="chip chip-lang" data-goto="settings" id="lang-now">🇷🇴</button>
+      <button class="chip chip-lang" id="lang-btn" aria-haspopup="true" aria-expanded="false"><span id="lang-now"></span><svg class="ic"><use href="#i-down"/></svg></button>
     </div>
   </header>
+
+  <div id="lang-menu" class="lang-menu hidden" role="menu"></div>
 
   <div class="layout">
     <aside class="sidebar">
@@ -177,34 +186,37 @@
           <button id="start-btn" class="btn big" data-i18n="start">Start</button>
         </div>
 
-        <div id="ex-run" class="hidden">
+        <div id="ex-run" class="run hidden">
           <div class="run-head">
-            <button id="quit-btn" class="icon-btn" title="✕">✕</button>
+            <button id="quit-btn" class="icon-btn" aria-label="✕"><svg class="ic"><use href="#i-x"/></svg></button>
             <div class="progress"><div id="progress-bar"></div></div>
+            <span id="run-count" class="run-count"></span>
           </div>
           <div class="question card">
-            <p class="q-label" id="q-label"></p>
-            <div class="prompt">
-              <span id="q-prompt"></span>
-              <span id="q-type" class="badge"></span>
+            <div class="q-body">
+              <p class="q-label" id="q-label"></p>
+              <div class="prompt">
+                <span id="q-prompt"></span>
+                <span id="q-type" class="badge"></span>
+              </div>
+              <p id="q-hint" class="q-hint hidden"></p>
+              <div id="answer-choices" class="choices hidden"></div>
+              <div id="answer-typing">
+                <textarea id="answer-input" rows="1" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+                <div class="special-chars" id="special-chars"></div>
+              </div>
+              <div id="answer-bank" class="hidden">
+                <div id="bank-answer" class="bank-line"></div>
+                <div id="bank-pool" class="bank-pool"></div>
+              </div>
             </div>
-            <p id="q-hint" class="q-hint hidden"></p>
-            <div id="answer-choices" class="choices hidden"></div>
-            <div id="answer-typing">
-              <textarea id="answer-input" rows="2" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
-              <div class="special-chars" id="special-chars"></div>
+            <div id="feedback" class="feedback">
+              <div class="fb-text">
+                <div id="fb-title"></div>
+                <div id="fb-detail"></div>
+              </div>
+              <button id="check-btn" class="btn big">Check</button>
             </div>
-            <div id="answer-bank" class="hidden">
-              <div id="bank-answer" class="bank-line"></div>
-              <div id="bank-pool" class="bank-pool"></div>
-            </div>
-          </div>
-          <div id="feedback" class="feedback">
-            <div class="fb-text">
-              <div id="fb-title"></div>
-              <div id="fb-detail"></div>
-            </div>
-            <button id="check-btn" class="btn big">Check</button>
           </div>
         </div>
 
@@ -275,7 +287,7 @@
 
       <footer class="footer">
         <span>© Deutsch Guy</span>
-        <span class="footer-ax"><span data-i18n="made_by">made by</span> <img src="assets/brand/ax-logo-horizontal-small-dark.svg" alt="AX Tech" height="16"></span>
+        <span class="footer-ax"><span data-i18n="made_by">made by</span> <img src="assets/brand/ax-wordmark-dark.svg" alt="AX Tech" height="11"></span>
       </footer>
     </main>
   </div>
@@ -285,7 +297,7 @@
     <div class="panel-head">
       <div id="panel-title" class="panel-title"></div>
       <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="panel-search" type="search"></label>
-      <button class="icon-btn" id="panel-close" title="✕">✕</button>
+      <button class="icon-btn" id="panel-close" aria-label="✕"><svg class="ic"><use href="#i-x"/></svg></button>
     </div>
     <ul id="panel-words" class="panel-words"></ul>
   </div>
@@ -293,7 +305,7 @@
   <!-- Word details -->
   <div id="word-modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-card card">
-      <button class="icon-btn modal-close" id="modal-close" title="✕">✕</button>
+      <button class="icon-btn modal-close" id="modal-close" aria-label="✕"><svg class="ic"><use href="#i-x"/></svg></button>
       <div id="modal-body"></div>
     </div>
   </div>
